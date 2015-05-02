@@ -20,3 +20,4 @@ Como no se que tanto sabe de Nasm le explicaré el codigo
 -imul: multiplicacion con signo
 -add: suma
 -cmp: compara
+El secreto está en restarle ‘0’ para convertirlo en numero y sumarle ‘0’  para pasarlo a ascii
