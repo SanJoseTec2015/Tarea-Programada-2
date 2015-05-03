@@ -1,3 +1,94 @@
+         section .bss                    ; Section containing uninitialized data
+
+BUFLEN equ 16                            ; We read the file 16 bytes at a time
+Buffer resb BUFLEN                       ; Text buffer itself
+
+   section .data                         ; Section containing initialized data
+
+HexStr: db " 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00",10
+HEXLEN 	equ $ - HexStr
+Digits: db "0123456789ABCDEF"
+
+   section .text                         ; Section containing code
+   global _start                         ; Linker needs this to find the entry point!
+
+_start:
+
+    ; Read a buffer full of text from stdin:
+read:
+
+    mov rax, 0			         ; sys_read (code 0)
+    mov rdi, 0			         ; file_descriptor (code 0 stdin)
+    mov rsi, Buffer		         ; address to the buffer to read into
+    mov rdx, BUFLEN		         ; maximun number of bytes to read
+    syscall                              ; system call
+
+    mov rbp, rax			        ; save the number of bytes read
+    cmp rax, 0			         ; test if the number of bytes read is 0
+    je done			         ; jump to the tag done if it is 0
+
+    ; Setup the register for later use
+    
+    mov rsi, Buffer                 ; place the buffer address in the rsi
+    mov rdi, HexStr                 ; place the Hex String address in the rdi
+    xor rcx, rcx                    ; clear the rcx to 0
+    xor rax, rax                	; clear the rax to 0
+
+
+    ; Go through the buffer and do ATOI
+
+scan:
+	next_digit:
+	    xor rax, rax                ; clear the rax to 0
+
+	    ; Get a char from the buffer and put it in RAX
+	    
+	    mov al, byte [rsi + rcx]    ; put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice
+	    ;mov rbx, rax               ; copy the char/byte into the rbx
+
+	    ; Look for the low byte
+	    
+	    and al, FFh                 ; mask out all the byte
+
+	 	sub al,'0'					; convert from ASCII to number
+		imul rbx,10
+		add rbx,rax 				; rbx = rbx*10 + eax
+		inc rcx 					; incrementa el indice dentro del string para ler el siguiente byte
+		cmp byte[esi+1],0h 			; si no ha llegado al final continua con el siguiente numero
+             jne .next_digit 
+		mov rax,rbx
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+		jmp int_to_string
+
+    ; Look for the high nybble and insert it into the string
+    shr bl, 4                            ; shift right the high nybble into the low nybble
+    mov bl, byte [Digits + rbx]          ; look for the char equivalent to the nybble
+    mov byte [HexStr + rdx + 1], bl      ; put the char into the Hex String result
+
+    ; Increase the buffer pointer and continue with the next
+    
+    inc rcx                              ; increment the line pointer
+    cmp rcx, rbp                         ; compare the line pointer with the total number of chars
+    jna scan                             ; jump to scan if rcx is not greater than rbp
+
+    ; Write the results to the stdout
+    mov rax, 1                           ; sys_write (code 1)
+    mov rdi, 1                           ; file_descriptor (code 1 stdout)
+    mov rsi, HexStr                      ; address of the buffer to print out
+    mov rdx, HEXLEN                      ; number of chars to print out
+    syscall                              ; system call
+
+    ; Jump to read the next bytes
+    jmp read                             ; jump back to the begining for the next batch
+
+done:
+
+    mov rax, 60                          ; sys_exit (code 60)
+    mov rdi, 0                           ; exit_code (code 0 successful)
+    syscall                         
+
 #Recibe en el registro ESI el string
 string_to_int:
  	 xor ebx,ebx				; clear ebx 
