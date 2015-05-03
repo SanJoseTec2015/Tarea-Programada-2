@@ -1,0 +1,3 @@
+http://tipsparaisc.blogspot.com/2012/04/ensamblador-8086-itoa.html
+
+CODIGO ITOA TOMADO DE ESTA DIRECCIÓN, y cambiado a 64bits
