@@ -8,16 +8,23 @@ Buffer resb BUFLEN                       ; Text buffer itself
 varIntToString: db "................................................................",10
 ;varIntToStringLEN 	equ $ - varIntToString
 
-debug: db "OK",10
+entrada: db "Entrada = "
+entradaLEN 	equ $ - entrada
+
+salida: db "Salida = "
+salidaLEN 	equ $ - salida
+
 
 
    section .text                         ; Section containing code
    global _start                         ; Linker needs this to find the entry point!
 
 _start:
+    
 
 ; Read a buffer full of text from stdin:
 read:
+    call intronum
 
 	mov rax, 0			         	; sys_read (code 0)
 	mov rdi, 0			         	; file_descriptor (code 0 stdin)
@@ -39,26 +46,26 @@ read:
 
 ; Go through the buffer and do ATOI
 scan:
-	xor rbx, rbx ; clear the rbx to 0
-	next_digit:
-
+	string_to_int:	
+        xor rbx, rbx ; clear the rbx to 0
         xor rax, rax                ; clear the rax to 0
 
-	    ; Get a char from the buffer and put it in RAX
+        next_digit:
 
-	    mov al, byte [rsi + rcx]    ; put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice
-	    ;mov rbx, rax               ; copy the char/byte into the rbx
+            ; Get a char from the buffer and put it in RAX
 
-	 	sub al,'0'					; convert from ASCII to number
-		imul rbx,10
-		add rbx,rax 				; rbx = rbx*10 + eax
-		inc rcx 			
+            mov al, byte [rsi + rcx]    ; put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice
+            ;mov rbx, rax               ; copy the char/byte into the rbx
+
+            sub al,'0'					; convert from ASCII to number
+            imul rbx,10
+            add rbx,rax 				; rbx = rbx*10 + eax
+            inc rcx 			
+            ; incrementa el indice dentro del string para ler el siguiente byte
+            cmp byte[rsi + rcx+1], 0h 			; si no ha llegado al final continua con el siguiente numero
+                jne next_digit 
         
-		; incrementa el indice dentro del string para ler el siguiente byte
-		cmp byte[rsi + rcx+1], 0h 			; si no ha llegado al final continua con el siguiente numero
-            jne next_digit 
-    
-		mov rax, rbx				; se mueve al registro rax el resultado
+            mov rax, rbx				; se mueve al registro rax el resultado
 
 	
 	int_to_string:	
@@ -78,7 +85,7 @@ scan:
 		xor rsi, rsi  ; clear the rsi to 0
 
 		itoa_1:
-			cmp rax,0   			; si ya se procesó todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
+			cmp rax,0   			; si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
 				je itoa_2			;
 			xor rdx,rdx  			; se limpia la parte alta del divisor
 			mov rbx,10
@@ -96,54 +103,80 @@ scan:
 			jmp write				; CX tiene el valor 0
 
 		itoa_3:
-			pop ax      			; Extraemos los numero del stack
-			add ax,'0'   			; lo pasamos a su valor ascii
+			pop rax      			; Extraemos los numero del stack
+			add rax,'0'   			; lo pasamos a su valor ascii
 			mov [varIntToString+rsi],al			; lo guardamos en la cadena final
 			inc rsi					; incrementamos el indice
-			loop itoa_3
+            cmp rsi,rcx   			; si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
+				je write			
+			jmp itoa_3
 
 ; Write the results to the stdout
 write:
     push rax
     push rdi
-    push rsi
+    ;push rsi
     push rdx
+    
+    inc rcx
+	mov byte[varIntToString+rsi],10			; agregamos un cambio de linea
+
     
 	mov rax, 1                           ; sys_write (code 1)
 	mov rdi, 1                           ; file_descriptor (code 1 stdout)
 	mov rsi, varIntToString              ; address of the buffer to print out
-	mov rdx, rsi					         ; number of chars to print out
-	syscall                              ; system call
+	mov rdx, rcx					         ; number of chars to print out
+    call resultado
+
+    syscall                              ; system call
 	; Jump to read the next bytes
     pop rdx
     pop rsi
     pop rdi
     pop rax
-    ;'call prueba
-
+    jmp done
 
 done:
     mov rax, 60                          ; sys_exit (code 60)
-    mov rdi, 0                           ; exit_code (code 0 successful)
+    mov rdi,    0                           ; exit_code (code 0 successful)
     syscall          
-
-prueba:
+    
+resultado:
     push rax
     push rdi
     push rsi
     push rdx
     
-    mov rax, 1                           ; sys_write (code 1)
-	mov rdi, 1                           ; file_descriptor (code 1 stdout)
-	mov rsi, debug              ; address of the buffer to print out
-	mov rdx, 4				         ; number of chars to print out
-	syscall                              ; system call
+    mov rax, 1                         ; sys_write (code 1)
+	mov rdi, 1                          ; file_descriptor (code 1 stdout)
+	mov rsi, salida                   ; address of the buffer to print out
+	mov rdx, salidaLEN			            ; number of chars to print out
+	syscall                                  ; system call
 
     pop rdx
     pop rsi
     pop rdi
     pop rax
     ret
+    
+intronum:
+    push rax
+    push rdi
+    push rsi
+    push rdx
+    
+    mov rax, 1                         ; sys_write (code 1)
+	mov rdi, 1                          ; file_descriptor (code 1 stdout)
+	mov rsi, entrada                   ; address of the buffer to print out
+	mov rdx, entradaLEN	            ; number of chars to print out
+	syscall                                  ; system call
+
+    pop rdx
+    pop rsi
+    pop rdi
+    pop rax
+    ret
+
 ;Como no se que tanto sabe de Nasm le explicaré el codigo
 ;-Hacer xor del mismo registro limpia el registro (lo pone en 0 todo)
 ;-.next_digit: es una sub-etiqueta de string_to_int: (es como hacer una pequeña función dentro de la etiqueta principal)
