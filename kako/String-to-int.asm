@@ -115,7 +115,7 @@ scan:
 write:
     push rax
     push rdi
-    ;push rsi
+    push rsi
     push rdx
     
     inc rcx
