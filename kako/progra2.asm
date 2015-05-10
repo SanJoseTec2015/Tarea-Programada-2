@@ -40,8 +40,6 @@ _start:
 
 
 call read
-;call atoi
-;call itoa
 call procesarEntrada
 call printPrueba
 jmp done
@@ -65,8 +63,6 @@ read:
 
 	;Setup the register for later use
 	mov rsi, Buffer				;place the buffer address in the rsi
-	mov rdi, varIntToString	;place the Hex String address in the rdi
-
 	xor rcx, rcx					;clear the rcx to 0
 	xor rax, rax					;clear the rax to 0
 ret
@@ -80,8 +76,7 @@ ret
 ;	almacernarlo en la variable toOperate y el String almacenarlo en la variable ToPrint.
 ;
 ;	E: RSI la direccion del buffer
-;	S: RCX almacena la cantidad de digitos transformados
-;		RAX el numero convertido a int
+;	S: RCX la cantidad de digitos transformados
 ;------------------------------------------------------------------------------------------------------------
 procesarEntrada:
 	xor r14, r14					;indice varToPrint
@@ -89,17 +84,56 @@ procesarEntrada:
 	xor rax, rax
 	nextChar:
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + rcx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
-		call isActualCharSymbol				;put in r10 1 if al is a symbol, else put 0
+		mov al, byte [rsi + r15]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r15 = indice
+		call isActualCharNumber				;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
-			jz addCharIntoTheVarToPrint		;if actual char is a Symbol, add the char into the varToPrint and varToOperate
-			jnz addIntIntoTheVarToPrint		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
-
+			jz addCharIntoTheVar		;if actual char is a Number, add the char into the varToPrint and varToOperate
+			jnz addIntIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
+			;en ambos se incrementan r15 de acuerdo a los bytes transformados
+		
 		continuarProcesando:						;return point for previous jumps
-		inc rcx 											;se incrementa el indice
-		cmp byte[rsi + rcx], 0h 				;si no ha llegado al final continua con el siguiente char/byte
+		cmp byte[rsi + r15], ',' 				;si no ha llegado al final continua con el siguiente char/byte
 			jne next_digit 
 ret
+
+
+isActualCharNumber:
+	push rbx
+	push rcx
+	
+	xor rbx, rbx
+	xor rcx, rcx
+
+	validarMayorA0:
+		cmp al, '0'				; test the actual read char against '0'
+			jae rbxTrue			; if >= 1
+
+	validarMenorA9:
+		cmp al, '9'				; test the read char against '9'
+			jbe rcxTrue			; if <=
+
+	rbxTrue:
+		mov rbx, 1
+		jmp validarMenorA9
+
+	rcxTrue:
+		mov rcx, 1
+
+	cmp rbx, rcx 			;si ambos son 1 la resta = 0 significa que el char es numerico
+		jz .isNumber
+	;else
+	.isNotNumber:			;si llego al final y no salto a ischar, entonces no es
+		xor r10,r10
+		jmp .exit
+
+	.isNumber:
+		mov r10, 1
+
+	.exit
+	pop rcx
+	pop rbx
+ret
+
 
 isActualCharSymbol:
 	push rcx
@@ -125,24 +159,21 @@ isActualCharSymbol:
 		pop rcx
 ret
 
-addCharIntoTheVarToPrint:
-	call debugS
-		jmp continuarProcesando
-
+addCharIntoTheVar:
 	mov byte[varToPrint+r15], al
+	mov byte[varToOperate+r15], al
 	inc r14										;indice varToOperate
 	inc r15										;indice varToPrint
-	jmp continuarProcesando
+jmp continuarProcesando
 	
-addIntIntoTheVarToPrint:
-	call debugI
-		jmp continuarProcesando
-
-	call atoi										;el procedimiento agrega los caracteres a la variable toOperate
-	call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
+addIntIntoTheVar:
+	call atoi										;el procedimiento deja en RAX el numero transformado
+	mov byte[varToOperate+r15], al
 	inc r14										;
+
+	call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
 	add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
-	jmp continuarProcesando
+jmp continuarProcesando
 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
@@ -337,10 +368,8 @@ printPrueba:
 	push rdi
 	push rsi
 	push rdx
-	push r15
-
 	
-	inc r15
+	mov byte[varIntToString+r15+1],10	;agregamos un cambio de linea
 	
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
@@ -348,7 +377,6 @@ printPrueba:
 	mov rdx, r15								;number of chars to print out
 	syscall										;system call
 
-	pop r15
 	pop rdx
 	pop rsi
 	pop rdi
