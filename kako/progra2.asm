@@ -67,19 +67,25 @@ read:
 	xor rax, rax					;clear the rax to 0
 ret
 
+;------------------------------------------------------------------------------------------------------------
+;	E: RSI el la direccion de inicio del numero a transformar
+;		RDI la cantidad de digitos del nuermos
+;	S: RCX almacena la cantidad de digitos transformados
+;		RAX el numero convertido a int
+;------------------------------------------------------------------------------------------------------------
 procesarEntrada:
-	xor r15, r15					;indice varToPrint
-	xor r14, r14					;indice vartoOperate
+	xor r14, r14					;indice varToPrint
+	xor r15, r15					;indice vartoOperate
 	nextChar:
 		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]	 ;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice
 		;mov rbx, rax						;copy the char/byte into the rbx
 		call isActualCharSymbol	;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
-			jz addCharInTheVarToPrint		; if actual char is a Symbol, add the char in the varToPrint
-			jnz addIntInTheVarToPrint			;else call atoi
+			jz addCharIntoTheVarToPrint		; if actual char is a Symbol, add the char in the varToPrint
+			jnz addIntIntoTheVarToPrint			;else call atoi
 			;jz	addCharInTheVarToOperate	; if actual char is a Symbol, add the char in the varToPrint
-		.procesarEntrada:
+		continuarProcesando:
 		inc rcx 			
 		;incrementa el indice dentro del string para ler el siguiente byte
 		cmp byte[rsi + rcx], 0h 	;si no ha llegado al final continua con el siguiente numero
@@ -89,13 +95,15 @@ ret
 
 isActualCharSymbol:
 	push rcx
-	push r10
 
+	xor r11,r11
 	xor rcx,rcx
 	nextSymbol:
 		cmp al, byte [varSymbols + rcx]	 ;if al is a symbol
 			jz .isSymbol
-
+		;mov r11b, byte [varSymbols + rcx]
+		;call debugR11
+		;xor r11,r11
 		inc rcx 												;incrementa el indice dentro de la variable de simbolos para leer el siguiente
 		cmp byte[varSymbols + rcx], 10	;si no ha llegado al final continua con el siguiente simbolo
 			jne nextSymbol
@@ -108,21 +116,19 @@ isActualCharSymbol:
 		mov r10, 1
 
 	.exit
-		pop r10
 		pop rcx
 ret
 
-addCharInTheVarToPrint:
-
+addCharIntoTheVarToPrint:
 	mov byte[varToPrint+r15], al
 	inc r15
-	jmp procesarEntrada
-
-addIntInTheVarToPrint:
+	jmp continuarProcesando
+	
+addIntIntoTheVarToPrint:
 	call atoi
 	call itoa										;el llamado a este procedimiento agrega los caracteres a la variable
 	add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
-	jmp procesarEntrada
+	jmp continuarProcesando
 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
@@ -192,7 +198,7 @@ ret
 		itoa_3:
 			pop rax							;Extraemos los numero del stack
 			add rax,'0'						;lo pasamos a su valor ascii
-			mov [varIntToString+rsi],al		;lo guardamos en la cadena final
+			mov [varIntToString+r15+rsi],al		;lo guardamos en la cadena final
 			inc rsi								;incrementamos el indice
 			cmp rsi,rcx						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
 				je write			
@@ -350,6 +356,24 @@ printR10:
 	syscall										;system call
 ret
 
+
+debugR11:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, [r11]				;address of the buffer to print out
+	mov rdx, 1								;number of chars to print out
+	syscall										;system call
+
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
 
 ;- movzx: la etiqueta mov permite mover la información de un;registro o buffer a otro registro siempre y cuando fueran del;mismo;tamaño tanto como en el que envía como el que recibe, ahora movzx permite que mover la información de uno más pequeño a otro más;grande en este caso mueve un byte(8 bits) a un registro de 32 bits (En 64 bits tengo entendido que NO se puede mover de 8bits a;64bits, solo de 16bits y 32bits a 64bits)
 ;-inc: incrementar
