@@ -40,6 +40,13 @@ _start:
 
 
 call read
+
+;mov rcx, 0
+;mov r15, 0
+;call atoi
+;call itoaP
+
+;mov r15, 4
 call procesarEntrada
 call printPrueba
 jmp done
@@ -94,7 +101,7 @@ procesarEntrada:
 			;en ambos se casos se esta incrementando el indice de acuerdo a los bytes transformados
 
 		continuarProcesando:						;return point for previous jumps
-		cmp byte[rsi + rcx+1], 0h 				;si no ha llegado al final continua con el siguiente char/byte
+		cmp byte[rsi + rcx], ',' 				;si no ha llegado al final continua con el siguiente char/byte
 			jnz nextChar 
 ret
 
@@ -105,10 +112,8 @@ ret
 ;	S: R10 1 si es un numero, 0 si no.
 ;	M: R10
 ;------------------------------------------------------------------------------------------------------------
-isActualCharNumber:
-	push rbx
-	
-	xor rbx, rbx
+isActualCharNumber:	
+	xor r10, r10
 
 	validarMenorA0:
 		cmp al, '0'				; test the actual read char against '0'
@@ -117,12 +122,15 @@ isActualCharNumber:
 	validarMayorA9:
 		cmp al, '9'				; test the read char against '9'
 			ja exit			; if >= 9
+			
+	validarNULL:
+		cmp al, 0h				; test the actual read char against '0'
+			jz exit			; if <= 0
 
 	isNumber:
 		inc r10	
 
 	exit:
-	pop rbx
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -206,7 +214,6 @@ atoi:
 	push rbx
 	push rcx
 	push r10
-	push r11
 
 	xor rbx, rbx;clear the rbx to 0
 	xor rax, rax				;clear the rax to 0
@@ -220,17 +227,19 @@ atoi:
 		inc rcx 			
 		;incrementa el indice dentro del string para ler el siguiente byte
 		;cmp byte[rsi + rcx+1], 0h 	;si no ha llegado al final continua con el siguiente numero
-		mov al, byte[rsi + rcx+1] 
+		mov al, byte[rsi + rcx] 
 		call isActualCharNumber
 		cmp r10, 1
 			jz next_digit
+		;cmp byte[rsi + rcx +1] , 0h
+			;jnz next_digit
+
+	.exit:
+	mov rax, rbx						;se mueve al registro rax el resultado
 	
-		mov rax, rbx						;se mueve al registro rax el resultado
-		
-		pop r11
-		pop r10
-		pop rcx
-		pop rbx
+	pop r10
+	pop rcx
+	pop rbx
 ret
 
 ;------------------------------------------------------------------------------------------------------------
