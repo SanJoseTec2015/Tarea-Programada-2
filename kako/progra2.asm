@@ -7,10 +7,10 @@
 
 	section .bss						 ;Section containing uninitialized data
 
-BUFLEN equ 20					;We read the file 20 bytes at a time
+BUFLEN equ 1024					;We read the file 1024 bytes at a time
 Buffer resb BUFLEN				;Text buffer itself
 
-	section .data					;Section containing initialized data
+	section .data						;Section containing initialized data
 	
 varIntToString: db "................................................................",10
 ;varIntToStringLEN 	equ $ - varIntToString
@@ -59,7 +59,7 @@ read:
 
 	mov rbp, rax					;save the number of bytes read
 	cmp rax, 0					 	;test if the number of bytes read is 0
-		je done					 	;jump to the tag done if it is 0
+		jz done					 	;jump to the tag done if it is 0
 
 	;Setup the register for later use
 	mov rsi, Buffer				;place the buffer address in the rsi
@@ -68,15 +68,17 @@ read:
 ret
 
 ;------------------------------------------------------------------------------------------------------------
-;													procesarEntrada 
+;											procesarEntrada 
 ;
-;	Es el primer procedimiento llamado. Lee byte por byte la entrada y valida si es un 
-;	numero o un symbolo. En caso de ser un simbolo, lo almacena en la variable toPrint
-;	y en la variable toPerate, si es un numero numero, se debe transformar a int y
-;	almacernarlo en la variable toOperate y el String almacenarlo en la variable ToPrint.
+;	Es el primer procedimiento llamado. recorre byte por byte la entrada y
+;	valida si es un numero o un simbolo. En caso de ser un caracter no
+;	numerico, lo almacena en la variable toPrint y en la variable toOperate
+;	si es un numero numero, se debe transformar a int y almacernarlo en 
+;	la variable toOperate y el String almacenarlo en la variable ToPrint.
 ;
 ;	E: RSI la direccion del buffer
-;	S: RCX la cantidad de digitos transformados
+;	S: RCX la poscion de inicio de las variables a leer
+;	M: R14, R15, RCX
 ;------------------------------------------------------------------------------------------------------------
 procesarEntrada:
 	xor r14, r14					;indice varToPrint
@@ -84,61 +86,55 @@ procesarEntrada:
 	xor rax, rax
 	nextChar:
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + r15]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r15 = indice
+		mov al, byte [rsi + rcx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
 		call isActualCharNumber				;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
-			jz addCharIntoTheVar		;if actual char is a Number, add the char into the varToPrint and varToOperate
-			jnz addIntIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
-			;en ambos se incrementan r15 de acuerdo a los bytes transformados
-		
+			jz addIntIntoTheVar		;if actual char is a Number, add the char into the varToPrint and varToOperate
+			jnz addCharIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
+			;en ambos se casos se esta incrementando el indice de acuerdo a los bytes transformados
+
 		continuarProcesando:						;return point for previous jumps
-		cmp byte[rsi + r15], ',' 				;si no ha llegado al final continua con el siguiente char/byte
-			jne next_digit 
+		cmp byte[rsi + rcx+1], 0h 				;si no ha llegado al final continua con el siguiente char/byte
+			jnz nextChar 
 ret
 
-
+;------------------------------------------------------------------------------------------------------------
+;											isActualCharNumber 
+;
+;	E: AL el byte a validar
+;	S: R10 1 si es un numero, 0 si no.
+;	M: R10
+;------------------------------------------------------------------------------------------------------------
 isActualCharNumber:
 	push rbx
-	push rcx
 	
 	xor rbx, rbx
-	xor rcx, rcx
 
-	validarMayorA0:
+	validarMenorA0:
 		cmp al, '0'				; test the actual read char against '0'
-			jae rbxTrue			; if >= 1
+			jb exit			; if <= 0
 
-	validarMenorA9:
+	validarMayorA9:
 		cmp al, '9'				; test the read char against '9'
-			jbe rcxTrue			; if <=
+			ja exit			; if >= 9
 
-	rbxTrue:
-		mov rbx, 1
-		jmp validarMenorA9
+	isNumber:
+		inc r10	
 
-	rcxTrue:
-		mov rcx, 1
-
-	cmp rbx, rcx 			;si ambos son 1 la resta = 0 significa que el char es numerico
-		jz .isNumber
-	;else
-	.isNotNumber:			;si llego al final y no salto a ischar, entonces no es
-		xor r10,r10
-		jmp .exit
-
-	.isNumber:
-		mov r10, 1
-
-	.exit
-	pop rcx
+	exit:
 	pop rbx
 ret
 
-
+;------------------------------------------------------------------------------------------------------------
+;											isActualCharSymbol 
+;
+;	E: AL el byte a validar
+;	S: R10 1 si es un symbolo matematico, 0 si no.
+;	M: R10
+;------------------------------------------------------------------------------------------------------------
 isActualCharSymbol:
 	push rcx
 
-	xor r11,r11
 	xor rcx,rcx
 	nextSymbol:
 		cmp al, byte [varSymbols + rcx]	 ;if al is a symbol
@@ -146,7 +142,7 @@ isActualCharSymbol:
 
 		inc rcx 												;incrementa el indice dentro de la variable de simbolos para leer el siguiente
 		cmp byte[varSymbols + rcx], 10	;si no ha llegado al final continua con el siguiente simbolo
-			jne nextSymbol
+			jnz nextSymbol
 
 	.isNotSymbol:											;si llego al final y no salto a ischar, entonces no es
 		xor r10,r10
@@ -159,20 +155,45 @@ isActualCharSymbol:
 		pop rcx
 ret
 
+;------------------------------------------------------------------------------------------------------------
+;											addCharIntoTheVar 
+;
+;	Agrega en las variables, toOperate y toPrint el caracter de en RAX
+;	E: AL el byte a insertar
+;------------------------------------------------------------------------------------------------------------
 addCharIntoTheVar:
 	mov byte[varToPrint+r15], al
 	mov byte[varToOperate+r15], al
-	inc r14										;indice varToOperate
+	add r14,8								;indice varToOperatem ;add 8byte=64bits
 	inc r15										;indice varToPrint
+	inc rcx										;indice del buffer
 jmp continuarProcesando
-	
+
+;------------------------------------------------------------------------------------------------------------
+;											addIntIntoTheVar 
+;
+;	Agrega en las variables, toPrint el numero completo desde el byte actual
+;	hasta el final del numero y en toOperate el numero convertido a entero
+;	E: RSI el buffer
+;		RCX	indice dentro del buffer
+;	M: RCX lo deja en la posicion del siguiente caracter
+;------------------------------------------------------------------------------------------------------------
 addIntIntoTheVar:
+	push rbx
+	push rcx										;se guarda el indice del buffer
+	
 	call atoi										;el procedimiento deja en RAX el numero transformado
 	mov byte[varToOperate+r15], al
-	inc r14										;
-
+	add r14,8									;add 8byte=64bits
+	
 	call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
 	add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
+	
+	mov rbx, rcx							;guardamos el numero de digitos
+	
+	pop rcx									;se regresa el indice del buffer
+	add rcx, rbx							;se le suma la cantidad de digitos leidos.
+	pop rbx
 jmp continuarProcesando
 
 ;------------------------------------------------------------------------------------------------------------
@@ -182,23 +203,34 @@ jmp continuarProcesando
 ;		RAX el numero convertido a int
 ;------------------------------------------------------------------------------------------------------------
 atoi:	
+	push rbx
+	push rcx
+	push r10
+	push r11
+
 	xor rbx, rbx;clear the rbx to 0
 	xor rax, rax				;clear the rax to 0
 
 	next_digit:
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + rcx]	 ;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice
-		;mov rbx, rax						;copy the char/byte into the rbx
-
+		mov al, byte [rsi + rcx]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
 		sub al,'0'							;convert from ASCII to number
 		imul rbx,10
-		add rbx,rax 						;rbx = rbx*10 + eax
+		add rbx,rax 					;rbx = rbx*10 + eax
 		inc rcx 			
 		;incrementa el indice dentro del string para ler el siguiente byte
-		cmp byte[rsi + rcx+1], 0h 	;si no ha llegado al final continua con el siguiente numero
-			jne next_digit 
+		;cmp byte[rsi + rcx+1], 0h 	;si no ha llegado al final continua con el siguiente numero
+		mov al, byte[rsi + rcx+1] 
+		call isActualCharNumber
+		cmp r10, 1
+			jz next_digit
 	
 		mov rax, rbx						;se mueve al registro rax el resultado
+		
+		pop r11
+		pop r10
+		pop rcx
+		pop rbx
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -251,6 +283,10 @@ ret
 	ret
 
 	itoaP:	
+	
+		push rbx
+		push rdx
+		push rsi
 		;El ciclo itoaP_1 extrae los digitos del menos al mas significativo de AX y los
 		;guarda en el stack. Al finalizar el ciclo el digito mas significativo esta
 		;arriba del stack. 
@@ -294,6 +330,11 @@ ret
 				je salirItoa			
 			jmp itoaP_3
 			salirItoa:
+		
+		pop rsi
+		pop rdx
+		pop rbx
+		
 	ret
 
 
@@ -303,10 +344,10 @@ write:
 	push rdi
 	push rsi
 	push rdx
-	
+
+	mov byte[varIntToString+rcx],10	;agregamos un cambio de linea al final
 	inc rcx
-	mov byte[varIntToString+rsi],10	;agregamos un cambio de linea
-	
+
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								 ;file_descriptor (code 1 stdout)
 	mov rsi, varIntToString			;address of the buffer to print out
@@ -369,8 +410,9 @@ printPrueba:
 	push rsi
 	push rdx
 	
-	mov byte[varIntToString+r15+1],10	;agregamos un cambio de linea
-	
+	mov byte[varToPrint+r15],10	;agregamos un cambio de linea
+	inc r15
+
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
 	mov rsi, varToPrint				;address of the buffer to print out
@@ -431,7 +473,6 @@ debugS:
 	mov rsi, varSymbol				;address of the buffer to print out
 	mov rdx, 2								;number of chars to print out
 	syscall										;system call
-	
 	pop rdx
 	pop rsi
 	pop rdi
