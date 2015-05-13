@@ -24,6 +24,7 @@ salidaLEN 	equ $ - salida
 varToOperate: db '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 10 
 
 varToPrint: db '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', 10
+
 varSymbols : db '+', '-', '*', '/', '(', ')','^', '%',10
 
 varSymbol : db '$',10
@@ -49,9 +50,16 @@ call read
 
 ;mov r15, 4
 call procesarEntrada
+
 call printVarToPrint
 call printVarToOperate
-call ponerAsteriscos
+;call ponerAsteriscos
+
+;call validarParentesisSobrantes
+
+call procesarVarToOperate
+
+call printVarToPrint
 ;call printVarToPrint
 jmp done
 ;call write
@@ -92,8 +100,8 @@ ret
 ;	M: R14, R15, RCX
 ;------------------------------------------------------------------------------------------------------------
 procesarEntrada:
-	xor r14, r14					;indice varToPrint
-	xor r15, r15					;indice vartoOperate
+	xor r14, r14					;indice vartoOperate 
+	xor r15, r15					;indice varToPrint
 	xor rax, rax
 	nextChar:
 		;Get a char from the buffer and put it in RAX
@@ -104,9 +112,94 @@ procesarEntrada:
 			jnz addCharIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
 			;en ambos se casos se esta incrementando el indice de acuerdo a los bytes transformados
 
-		continuarProcesando:						;return point for previous jumps
-		cmp byte[rsi + rcx], ',' 				;si no ha llegado al final continua con el siguiente char/byte
-			jnz nextChar 
+	continuarProcesando:						;return point for previous jumps
+	cmp byte[rsi + rcx], ',' 				;si no ha llegado al final continua con el siguiente char/byte
+		jnz nextChar 
+			
+		
+ret
+
+;------------------------------------------------------------------------------------------------------------
+;											addCharIntoTheVar 
+;
+;	Agrega en las variables, toOperate y toPrint el caracter de en RAX
+;	E: AL el byte a insertar
+;------------------------------------------------------------------------------------------------------------
+addCharIntoTheVar:
+	mov byte[varToPrint+r15], al
+	mov qword[varToOperate+r14], rax
+	add r14, 8								;indice varToOperatem ;add 8byte=64bits
+	inc r15										;indice varToPrint
+	inc rcx										;indice del buffer
+jmp continuarProcesando
+
+;------------------------------------------------------------------------------------------------------------
+;											addIntIntoTheVar 
+;
+;	Agrega en las variables, toPrint el numero completo desde el byte actual
+;	hasta el final del numero y en toOperate el numero convertido a entero
+;	E: RSI el buffer
+;		RCX	indice dentro del buffer
+;	M: RCX lo deja en la posicion del siguiente caracter
+;------------------------------------------------------------------------------------------------------------
+addIntIntoTheVar:
+	push rbx
+	push rcx										;se guarda el indice del buffer
+	
+	call atoi										;el procedimiento deja en RAX el numero transformado
+	mov qword[varToOperate+r14], rax
+	add r14,8									;add 8byte=64bits
+	
+	call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
+	add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
+	
+	mov rbx, rcx							;guardamos el numero de digitos
+	
+	pop rcx									;se regresa el indice del buffer
+	add rcx, rbx							;se le suma la cantidad de digitos leidos.
+	pop rbx
+jmp continuarProcesando
+
+
+procesarVarToOperate:
+
+	push r14 
+	
+	xor r14, r14					;indice vartoOperate
+	xor r15, r15					;indice varToPrint
+	xor rax, rax
+	
+	.nextChar:
+		;call printVarToPrint
+		;Get a char from the buffer and put it in RAX
+		mov rax , qword [varToOperate + r14]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
+		call isActualCharSymbol				;put in r10 1 if al is a symbol, else put 0
+		cmp r10, 1
+			jz .addCharIntoTheVar 		;if actual char is a Number, add the char into the varToPrint and varToOperate
+			jnz .addIntIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
+			;en ambos se casos se esta incrementando el indice de acuerdo a los bytes transformados
+			
+	.addCharIntoTheVar:
+		mov byte[varToPrint+r15], al
+		inc r15										;indice varToPrint
+		jmp .continuarProcesando
+		
+	.addIntIntoTheVar:
+		push rcx										;se guarda el indice del buffer
+		
+		call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
+		add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
+
+		pop rcx									;se regresa el indice del buffer
+
+	.continuarProcesando:						;return point for previous jumps
+
+		add r14,8									;add 8byte=64bits
+
+		cmp qword[varToOperate + r14], 0				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
+
+	pop r14
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -164,6 +257,7 @@ isActualCharSymbol:
 		mov r10, 1
 
 	.exit
+		call isVariable
 		pop rcx
 ret
 
@@ -174,9 +268,7 @@ ret
 ;	S: R10 1 si es una variable, 0 si no.
 ;	M: R10
 ;------------------------------------------------------------------------------------------------------------
-isVariable:
-	push r11
-	
+isVariable:	
 	xor r10, r10
 	
 	validarMenorAA:
@@ -199,46 +291,6 @@ isVariable:
 	isVar:
 	inc r10	
 ret
-;------------------------------------------------------------------------------------------------------------
-;											addCharIntoTheVar 
-;
-;	Agrega en las variables, toOperate y toPrint el caracter de en RAX
-;	E: AL el byte a insertar
-;------------------------------------------------------------------------------------------------------------
-addCharIntoTheVar:
-	mov byte[varToPrint+r15], al
-	mov qword[varToOperate+r14], rax
-	add r14, 8								;indice varToOperatem ;add 8byte=64bits
-	inc r15										;indice varToPrint
-	inc rcx										;indice del buffer
-jmp continuarProcesando
-
-;------------------------------------------------------------------------------------------------------------
-;											addIntIntoTheVar 
-;
-;	Agrega en las variables, toPrint el numero completo desde el byte actual
-;	hasta el final del numero y en toOperate el numero convertido a entero
-;	E: RSI el buffer
-;		RCX	indice dentro del buffer
-;	M: RCX lo deja en la posicion del siguiente caracter
-;------------------------------------------------------------------------------------------------------------
-addIntIntoTheVar:
-	push rbx
-	push rcx										;se guarda el indice del buffer
-	
-	call atoi										;el procedimiento deja en RAX el numero transformado
-	mov qword[varToOperate+r14], rax
-	add r14,8									;add 8byte=64bits
-	
-	call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
-	add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
-	
-	mov rbx, rcx							;guardamos el numero de digitos
-	
-	pop rcx									;se regresa el indice del buffer
-	add rcx, rbx							;se le suma la cantidad de digitos leidos.
-	pop rbx
-jmp continuarProcesando
 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
@@ -411,28 +463,101 @@ write:
 	jmp done
 ret
 
+;******************************************************************************
+;						OPERACIONES DE VALIDACION
+
+validarParentesisSobrantes:
+	push rax
+	push rbx
+	push rcx
+	
+	mov rbx, r14		;almacenamos la cantidad de bytes de la variable
+
+	xor rcx,rcx 		;reiniciamos el contador
+	.nextChar:
+		mov rax, qword [varToOperate + rcx]
+		cmp rax, '('	 ;if al is a symbol
+			jz validarCierre
+
+		add rcx, 8						;incrementa el indice dentro de la variable de simbolos para leer el siguiente
+		cmp rcx, rbx	;si no ha llegado al final continua con el siguiente simbolo
+			jnz nextChar
+			jz .exit
+			
+	removerParentesis:
+		call ProcRemoverParentesis
+		jmp nextChar
+		
+	ProcRemoverParentesis:
+		push rcx
+		push rax
+			mov rax, [varToOperate + rcx + 8]			;se mueve el siguiente caracter
+			mov qword [varToOperate + rcx], rax		;sobreescribo el caracter actual con el siguiente
+			add rcx, 8
+			recorrer:
+				mov rax, [varToOperate + rcx + 8]			;se mueve el siguiente caracter
+				mov qword [varToOperate + rcx], rax		;sobreescribo el caracter actual con el siguiente
+				add rcx, 8
+				cmp rcx, rbx							;si no ha llegado al final continua con el siguiente simbolo
+					ja recorrer
+		pop rax
+		pop rcx
+	ret
+	
+	validarCierre:
+		
+		cmp [rcx + 16], rbx	;si no ha llegado al final continua con el siguiente simbolo
+			jb validarParentesisSobrantes.exit
+			
+		mov rax, ')'
+		cmp rax, qword [varToOperate + rcx + 16]	 ;(x) compara el caracter actual con dos caracteres siguientes
+			jz removerParentesis
+
+	validarParentesisSobrantes.exit
+		pop rcx
+		pop rbx
+		pop rax
+ret
+	
+
+
+
+;******************************************************************************
+	
+
+;******************************************************************************
+;						OPERACIONES ARITMETICAS
+sumar:
+	add rax, rbx
+ret
+
+restar:
+	sub rax, rbx
+ret
+
+multiplicar:
+	push rdx
+	
+	xor rdx, rdx 
+	imul rbx
+	
+	pop rdx
+ret
+
+dividir:
+	push rdx
+
+	div rbx ;RDX:RAX / RBX
+	
+	pop rdx
+ret
+;******************************************************************************
+
+
 done:
 	mov rax, 60							;sys_exit (code 60)
 	mov rdi,	0								;exit_code (code 0 successful)
 	syscall		  
-	
-resultado:
-	push rax
-	push rdi
-	push rsi
-	push rdx
-	
-	mov rax, 1								;sys_write (code 1)
-	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, salida							;address of the buffer to print out
-	mov rdx, salidaLEN					;number of chars to print out
-	syscall										;system call
-
-	pop rdx
-	pop rsi
-	pop rdi
-	pop rax
-	ret
 	
 intronum:
 	push rax
@@ -482,8 +607,8 @@ printVarToOperate:
 	push rdx
 	push r14
 	
-	mov byte[varToOperate+r14],10	;agregamos un cambio de linea
-	inc r14
+	mov qword[varToOperate+r14],10	;agregamos un cambio de linea
+	add r14, 8
 
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
@@ -506,33 +631,6 @@ debug:
 	syscall										;system call
 ret
 
-printR10:
-	add r10, '0'
-	mov rax, 1								;sys_write (code 1)
-	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, r10				;address of the buffer to print out
-	mov rdx, 8								;number of chars to print out
-	syscall										;system call
-ret
-
-
-debugR11:
-	push rax
-	push rdi
-	push rsi
-	push rdx
-
-	mov rax, 1								;sys_write (code 1)
-	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, [r11]				;address of the buffer to print out
-	mov rdx, 1								;number of chars to print out
-	syscall										;system call
-
-	pop rdx
-	pop rsi
-	pop rdi
-	pop rax
-ret
 
 debugS:
 	push rax
