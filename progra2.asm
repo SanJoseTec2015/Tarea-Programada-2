@@ -52,6 +52,10 @@ _start:
 	call procesarEntrada
 	;call printVarToPrint
 	call printVarToOperate
+	
+	call cambiarVariables
+	
+	call printVarToOperate
 	;call ponerAsteriscos
 	;call validarParentesisSobrantes
 	;call procesarVarToOperate
@@ -94,13 +98,13 @@ ret
 ;------------------------------------------------------------------------------------------------------------
 procesarEntrada:
 	xor r14, r14					;indice vartoOperate 
-	nextChar:
+	.nextChar:
 		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
 		call addCharIntoVarToOperate				;add the char into the varToOperate
 		inc rcx											;indice buffer
 		cmp byte[rsi + rcx], ',' 				;si no ha llegado al final continua con el siguiente char/byte
-		jnz nextChar 
+			jnz .nextChar 
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -116,65 +120,67 @@ addCharIntoVarToOperate:
 ret
 
 
-procesarVariables:
+cambiarVariables:
 	xor r13, r13					;indice vartoOperate 
 	.nextChar:
-		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
-		call isVariable				;put in r10 1 if al is a symbol, else put 0
+		call isVariable								;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
-			jz cambiarVariable	;if actual char is a variable, add the char into the varTvariables
+			jz buscarVarEnVarToOperate					;if actual char is a variable, add the char into the varTvariables
 		
+		.continuar
 		inc rcx
 		
 		cmp byte[rsi + rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz nextChar 
+			jnz .nextChar 
 ret
 
 
 
-cambiarVariable:
-	push rcx
+buscarVarEnVarToOperate:
+	push rdx
+	push rbx
 	
 	mov rbx, rax				; le movemos la variable actual
 	
-	xor rcx, rcx
+	xor rdx, rdx
 	.nextChar:
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [varToOperate + rcx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
+		mov al, byte [varToOperate + rdx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rdx = indice
 		cmp rax, rbx												;comparo la variable actual, con el caracter actual de varToOperate
 			jz cambiarValor		;if actual char is a variable, add the char into the varTvariables
+		inc rdx
 		
-		inc rcx
-		
-		cmp byte[rsi + rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz nextChar 
-
-	pop rcx
-ret
+		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
+	
+	pop rbx
+	pop rdx
+jmp cambiarVariables.continuar
 
 
 cambiarValor:
-	push rbx
-
+	push rdx
+	
+	mov rdx, rcx							;movem al indice de la operacion actual el indice de donde comienza la variable
 	.nextChar:
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + rbx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rbx = indice
+		mov al, byte [rsi + rdx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rdx = indice
 		call isDigit
 		cmp r10, 1
 			jz moverValor		;if actual char is a variable, add the char into the varTvariables
+			
+		.continuar
 		
-		inc rbx
-		
-		cmp byte[rsi + rbx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz nextChar 
+		inc rdx
+		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
 
-	pop rbx
+	pop rdx
 ret
 
 moverValor:
 	push r14
-	push rcx
 
 	PrevChar:
 		mov bl, byte [varToOperate + r14]		;se mueve el ultimo caracter de la variable
@@ -185,13 +191,8 @@ moverValor:
 			jnz PrevChar 
 		
 		mov byte [varToOperate + r14], al
-
-
-
-
-	pop rcx
 	pop r14
-ret
+jmp cambiarValor.continuar
 
 
 ;------------------------------------------------------------------------------------------------------------
@@ -541,12 +542,12 @@ validarParentesisSobrantes:
 
 		add rcx, 8						;incrementa el indice dentro de la variable de simbolos para leer el siguiente
 		cmp rcx, rbx	;si no ha llegado al final continua con el siguiente simbolo
-			jnz nextChar
+			jnz .nextChar
 			jz .exit
 			
 	removerParentesis:
 		call ProcRemoverParentesis
-		jmp nextChar
+		jmp validarParentesisSobrantes.nextChar
 		
 	ProcRemoverParentesis:
 		push rcx
@@ -554,12 +555,12 @@ validarParentesisSobrantes:
 			mov rax, [varToOperate + rcx + 8]			;se mueve el siguiente caracter
 			mov qword [varToOperate + rcx], rax		;sobreescribo el caracter actual con el siguiente
 			add rcx, 8
-			recorrer:
+			.recorrer:
 				mov rax, [varToOperate + rcx + 8]			;se mueve el siguiente caracter
 				mov qword [varToOperate + rcx], rax		;sobreescribo el caracter actual con el siguiente
 				add rcx, 8
 				cmp rcx, rbx							;si no ha llegado al final continua con el siguiente simbolo
-					ja recorrer
+					ja .recorrer
 		pop rax
 		pop rcx
 	ret
