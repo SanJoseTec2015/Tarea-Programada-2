@@ -27,7 +27,7 @@ varToPrint: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0
 
 varVariables: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 10
 
-varSymbols : db '+', '-', '*', '/', '(', ')','^', '%',0h
+varOperadores : db '+', '-', '*', '/','^', '%',0h
 
 varSymbol : db '$',10
 
@@ -119,80 +119,167 @@ addCharIntoVarToOperate:
 	inc r14									;indice varToOperate 
 ret
 
-
+;------------------------------------------------------------------------------------------------------------
+;											cambiarVariables 
+;
+;	E: RCX la posicion de inicio de las variables
+;------------------------------------------------------------------------------------------------------------
 cambiarVariables:
-	xor r13, r13					;indice vartoOperate 
 	.nextChar:
-		mov al, byte [rsi + rcx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
+		mov al, byte [rsi + rcx]	 			;
+		
 		call isVariable								;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
 			jz buscarVarEnVarToOperate					;if actual char is a variable, add the char into the varTvariables
-		
+
 		.continuar
 		inc rcx
-		
 		cmp byte[rsi + rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar 
 ret
 
 
 
-buscarVarEnVarToOperate:
-	push rdx
-	push rbx
+cambiarVariable:
+
+	call getPosVar		;devuelve la posicion en RDX
+	call getPosValue	;devuelve la posicion en R8
+	call movValue		;mueve a RDX los valores numericos iniciando en la posicion R8 del buffer
 	
-	mov rbx, rax				; le movemos la variable actual
-	
-	xor rdx, rdx
-	.nextChar:
-		;Get a char from the buffer and put it in RAX
-		mov al, byte [varToOperate + rdx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rdx = indice
-		cmp rax, rbx												;comparo la variable actual, con el caracter actual de varToOperate
-			jz cambiarValor		;if actual char is a variable, add the char into the varTvariables
-		inc rdx
-		
-		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar 
-	
-	pop rbx
-	pop rdx
 jmp cambiarVariables.continuar
 
 
-cambiarValor:
-	push rdx
+;------------------------------------------------------------------------------------------------------------
+;											getPosVar
+;	E: AL el byte con la variable a buscar
+;	S: RDX indice dentro de varToPos con la varible
+;		Si la variable no exite RDX = -1
+;------------------------------------------------------------------------------------------------------------
+getPosVar:
+	push rbx
 	
-	mov rdx, rcx							;movem al indice de la operacion actual el indice de donde comienza la variable
+	xor rdx, rdx
 	.nextChar:
+		mov bl, byte [varToOperate + rdx]	 			;
+		cmp al, bl						
+			jz .exit
+		inc rdx
+
+		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar
+		mov rdx, -1
+	.exit
+	pop rbx
+ret
+
+;------------------------------------------------------------------------------------------------------------
+;											getPosValue 
+;	R8 almacena el indice de inicio del valor de la variable en el buffer
+;	M: R8
+;------------------------------------------------------------------------------------------------------------
+getPosValue:
+	push rax
+	
+	mov r8, rcx							;movem al indice de la operacion actual el indice de donde comienza la variable
+	.nextChar:
+
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + rdx]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rdx = indice
+		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
+		call isDigit
+		cmp r10, 1
+			jz .exit		;if actual char is a variable, add the char into the varTvariables
+
+		inc r8
+		mov al, byte[rsi + r8]
+		call isVariable
+			jnz .nextChar 
+		; ELSE: ENVIAR ERROR DE VARIABLE NO DEFINIDA
+	
+	.exit:
+	pop rax
+ret
+
+;siempre que los bytes siguientes sean numeros los va insertando 
+movValue:
+	mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+	.nextDigit:
+		call hacerCampoEnVarToOperate
+		mov  byte [varToOperate + rdx-1], al 
+		inc r8
+		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+		call isDigit
+		cmp r10, 1
+			jz .nextDigit
+
+jmp buscarVarEnVarToOperate				;busca otra variable
+
+;------------------------------------------------------------------------------------------------------------
+;											buscarVarEnVarToOperate 
+;	M: RBX, RDX
+;------------------------------------------------------------------------------------------------------------
+buscarVarEnVarToOperate:
+	xor rdx, rdx
+	.nextChar:
+		mov bl, byte [varToOperate + rdx]	 			;
+		cmp al, bl						
+			jz buscarInicioDelValor		
+		inc rdx
+
+		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
+jmp cambiarVariables.continuar
+
+;------------------------------------------------------------------------------------------------------------
+;											buscarInicioDelValor 
+;	R8 almacena el indice de inicio del valor de la variable en el buffer
+;	M: R8
+;------------------------------------------------------------------------------------------------------------
+buscarInicioDelValor:
+	mov r8, rcx							;movem al indice de la operacion actual el indice de donde comienza la variable
+	.nextChar:
+
+		;Get a char from the buffer and put it in RAX
+		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
 		call isDigit
 		cmp r10, 1
 			jz moverValor		;if actual char is a variable, add the char into the varTvariables
-			
 		.continuar
-		
-		inc rdx
-		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+		inc r8
+		cmp byte[rsi + r8], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar 
-
-	pop rdx
 ret
 
+;siempre que llos bytes siguientes sean numeros los va insertando 
 moverValor:
-	push r14
+	mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+	.nextDigit:
+		call hacerCampoEnVarToOperate
+		mov  byte [varToOperate + rdx-1], al 
+		inc r8
+		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+		call isDigit
+		cmp r10, 1
+			jz .nextDigit
 
+jmp buscarVarEnVarToOperate				;busca otra variable
+
+hacerCampoEnVarToOperate:
+	push r9
+	push rbx
+	
+	mov r9, r14		;guardamos en r9 el indice final del varToPrint
 	PrevChar:
 		mov bl, byte [varToOperate + r14]		;se mueve el ultimo caracter de la variable
 		mov byte [varToOperate + r14+1], bl	;se mueve el ultimo caracter una posicion a la derecha
-		
-		dec r14
-		cmp r14, rcx				;si no ha llegado al final continua con el siguiente char/byte
+		dec r9
+		cmp rdx, r9				;si no ha llegado al final continua con el siguiente char/byte
 			jnz PrevChar 
-		
-		mov byte [varToOperate + r14], al
-	pop r14
-jmp cambiarValor.continuar
+		inc rdx
+		inc r14
+	
+	pop rbx
+	pop r9
+ret
 
 
 ;------------------------------------------------------------------------------------------------------------
@@ -234,7 +321,7 @@ procesarVarToOperate:
 		;call printVarToPrint
 		;Get a char from the buffer and put it in RAX
 		mov rax , qword [varToOperate + r14]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
-		call isActualCharSymbol				;put in r10 1 if al is a symbol, else put 0
+		call isOperador				;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
 			jz .addCharIntoTheVar 		;if actual char is a Number, add the char into the varToPrint and varToOperate
 			jnz .addIntIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
@@ -292,22 +379,22 @@ isDigit:
 ret
 
 ;------------------------------------------------------------------------------------------------------------
-;											isActualCharSymbol 
+;											isOperador 
 ;
 ;	E: AL el byte a validar
 ;	S: R10 1 si es un symbolo matematico, 0 si no.
 ;	M: R10
 ;------------------------------------------------------------------------------------------------------------
-isActualCharSymbol:
+isOperador:
 	push rcx
 
 	xor rcx,rcx
 	nextSymbol:
-		cmp al, byte [varSymbols + rcx]	 ;if al is a symbol
+		cmp al, byte [varOperadores + rcx]	 ;if al is a symbol
 			jz .isSymbol
 
 		inc rcx 												;incrementa el indice dentro de la variable de simbolos para leer el siguiente
-		cmp byte[varSymbols + rcx], 10	;si no ha llegado al final continua con el siguiente simbolo
+		cmp byte[varOperadores + rcx], 10	;si no ha llegado al final continua con el siguiente simbolo
 			jnz nextSymbol
 
 	.isNotSymbol:											;si llego al final y no salto a ischar, entonces no es
@@ -355,7 +442,6 @@ ret
 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
-;		RDI la cantidad de digitos del nuermos
 ;	S: RCX almacena la cantidad de digitos transformados
 ;		RAX el numero convertido a int
 ;------------------------------------------------------------------------------------------------------------
@@ -667,6 +753,7 @@ printVarToOperate:
 	push rsi
 	push rdx
 	push r14
+	push rcx
 	
 	mov qword[varToOperate+r14],10	;agregamos un cambio de linea
 	add r14, 8
@@ -677,6 +764,7 @@ printVarToOperate:
 	mov rdx, r14						;number of chars to print out
 	syscall										;system call
 	
+	pop rcx
 	pop r14
 	pop rdx
 	pop rsi
@@ -685,11 +773,23 @@ printVarToOperate:
 ret
 	
 debug:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, varSymbols				;address of the buffer to print out
-	mov rdx, 1								;number of chars to print out
+	mov rsi, varDebug				;address of the buffer to print out
+	mov rdx, 3								;number of chars to print out
 	syscall										;system call
+	
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
 ret
 
 
