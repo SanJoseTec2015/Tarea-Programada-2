@@ -50,7 +50,11 @@ _start:
 	;call itoaP
 	;mov r15, 4
 	call procesarEntrada
-	;call printVarToPrint
+		;call printVarToPrint
+	call printVarToOperate
+	
+	call ponerAsteriscos
+
 	call printVarToOperate
 	
 	call cambiarVariables
@@ -119,6 +123,60 @@ addCharIntoVarToOperate:
 	inc r14									;indice varToOperate 
 ret
 
+
+ponerAsteriscos:
+	push rcx
+	xor rcx, rcx
+	.nextChar:
+		mov al, byte [varToOperate + rcx]	 			;put a char/byte from the var into the al, rcx = indice
+		call isOperador
+		cmp r10, 0								;si no es un operador, salta a validar el siguiente
+			jz validarPonerAsteriscos
+			
+		.continuar:
+		inc rcx									;indice
+		cmp rcx, r14 				 ;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
+	pop rcx
+ret
+
+
+validarPonerAsteriscos:
+	push r8
+	push rax
+	
+	cmp al, '('
+		jz .exit
+	
+	call isDigit						
+	mov r8, r10
+	
+	mov al, byte [varToOperate + rcx+1]
+	
+	call isDigit
+	and r8, r10
+	cmp r8, 1
+		jz .exit						;valida el caso en que NO hay que poner asterisco, cuando tengo un numero, y lo siguiente es un numero
+	
+	call isOperador			
+	cmp r10, 1
+		jz .exit
+		
+	
+	cmp al, ')'						;compara si el sieguiente es un )... 
+		jz .exit
+	
+	mov rdx, rcx ;parametro del procedimiento, el lugar al que hay que dejar libre
+	call liberarByteVarToOperate
+	
+	mov byte [varToOperate + rcx+1], '*'
+	inc rcx
+	
+	.exit:
+		pop rax
+		pop r8
+		
+jmp ponerAsteriscos.continuar
 ;------------------------------------------------------------------------------------------------------------
 ;											cambiarVariables 
 ;
@@ -228,7 +286,7 @@ liberarByteVarToOperate:
 		mov bl, byte [varToOperate + r9]		;se mueve el ultimo caracter de la variable
 		mov byte [varToOperate + r9+1], bl	;se mueve el ultimo caracter una posicion a la derecha
 		
-		cmp rdx, r9				;si no ha llegado al final continua con el siguiente char/byte
+		cmp rdx, r9						;si no ha llegado al final continua con el siguiente char/byte
 			jnz .PrevChar 
 		inc r14
 	
@@ -360,7 +418,6 @@ isOperador:
 		mov r10, 1
 
 	.exit
-		call isVariable
 		pop rcx
 ret
 
@@ -579,10 +636,6 @@ ret
 		pop rbx
 		
 	ret
-
-ponerAsteriscos:
-
-ret
 
 ;Write the results to the stdout
 write:
