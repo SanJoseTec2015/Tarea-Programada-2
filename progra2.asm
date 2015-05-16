@@ -143,8 +143,14 @@ ret
 cambiarVariable:
 
 	call getPosVar		;devuelve la posicion en RDX
+		cmp rdx, -1
+			jz .exit
+	
 	call getPosValue	;devuelve la posicion en R8
 	call movValue		;mueve a RDX los valores numericos iniciando en la posicion R8 del buffer
+	jmp cambiarVariable
+	
+	.exit:
 	
 jmp cambiarVariables.continuar
 
@@ -157,21 +163,18 @@ jmp cambiarVariables.continuar
 ;------------------------------------------------------------------------------------------------------------
 getPosVar:
 	push rbx
-	
 	xor rdx, rdx
 	.nextChar:
 		mov bl, byte [varToOperate + rdx]	 			;
 		cmp al, bl						
 			jz .exit
 		inc rdx
-
-		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar					;si llega al final y no encontro la variable devuelve un -1
+		cmp byte[rsi + rdx], 0h	;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar				;si llega al final y no encontro la variable devuelve un -1
 		mov rdx, -1
 	.exit
 	pop rbx
 ret
-
 ;------------------------------------------------------------------------------------------------------------
 ;											getPosValue 
 ;	R8 almacena el indice de inicio del valor de la variable en el buffer
@@ -179,41 +182,40 @@ ret
 ;------------------------------------------------------------------------------------------------------------
 getPosValue:
 	push rax
-	
-	mov r8, rcx							;movem al indice de la operacion actual el indice de donde comienza la variable
+	mov r8, rcx				;movem al indice de la operacion actual el indice de donde comienza la variable
 	.nextChar:
-
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
+		mov al, byte [rsi + r8]	 ;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
 		call isDigit
 		cmp r10, 1
-			jz .exit		;if actual char is a variable, add the char into the varTvariables
-
+			jz .exit			;if actual char is an number, add the char into the varTvariables
 		inc r8
 		mov al, byte[rsi + r8]
 		call isVariable
 			jnz .nextChar 
-		; ELSE: ENVIAR ERROR DE VARIABLE NO DEFINIDA
-	
+		; TODO ELSE: ENVIAR ERROR DE VARIABLE NO DEFINIDA
 	.exit:
 	pop rax
 ret
-
 ;siempre que los bytes siguientes sean numeros los va insertando 
 movValue:
 	push rax
 	
 	mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+	mov  byte [varToOperate + rdx], al 
+
 	.nextDigit:
-		call liberarByteVarToOperate
-		mov  byte [varToOperate + rdx], al 
-		inc rdx
 		inc r8
 		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
 		call isDigit
 		cmp r10, 1
-			jz .nextDigit
-			
+			jnz .exit
+		call liberarByteVarToOperate
+		inc rdx
+
+		mov  byte [varToOperate + rdx], al 
+	jmp .nextDigit
+	.exit:
 	pop rax
 ret
 
