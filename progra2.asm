@@ -127,7 +127,6 @@ ret
 cambiarVariables:
 	.nextChar:
 		mov al, byte [rsi + rcx]	 			;
-		
 		call isVariable								;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
 			jz cambiarVariable					;if actual char is a variable, add the char into the varTvariables
@@ -139,21 +138,19 @@ cambiarVariables:
 ret
 
 
-
+;------------------------------------------------------------------------------------------------------------
+;											cambiarVariables
+;	Itera la variable to operate y sustitute los las variables con el valor correspondiente
+;	E: RCX la posicion de variable para sustituir en el buffer
+;------------------------------------------------------------------------------------------------------------
 cambiarVariable:
-
 	call getPosVar		;devuelve la posicion en RDX
 		cmp rdx, -1
-			jz .exit
+			jz cambiarVariables.continuar
 	
 	call getPosValue	;devuelve la posicion en R8
 	call movValue		;mueve a RDX los valores numericos iniciando en la posicion R8 del buffer
-	jmp cambiarVariable
-	
-	.exit:
-	
-jmp cambiarVariables.continuar
-
+jmp cambiarVariable
 
 ;------------------------------------------------------------------------------------------------------------
 ;											getPosVar
@@ -219,8 +216,6 @@ movValue:
 	pop rax
 ret
 
-
-
 liberarByteVarToOperate:
 	push r9
 	push rbx
@@ -241,76 +236,6 @@ liberarByteVarToOperate:
 	pop rbx
 	pop r9
 ret
-
-
-;------------------------------------------------------------------------------------------------------------
-;											buscarVarEnVarToOperate 
-;	M: RBX, RDX
-;------------------------------------------------------------------------------------------------------------
-buscarVarEnVarToOperate:
-	xor rdx, rdx
-	.nextChar:
-		mov bl, byte [varToOperate + rdx]	 			;
-		cmp al, bl						
-			jz buscarInicioDelValor		
-		inc rdx
-
-		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar 
-jmp cambiarVariables.continuar
-
-;------------------------------------------------------------------------------------------------------------
-;											buscarInicioDelValor 
-;	R8 almacena el indice de inicio del valor de la variable en el buffer
-;	M: R8
-;------------------------------------------------------------------------------------------------------------
-buscarInicioDelValor:
-	mov r8, rcx							;movem al indice de la operacion actual el indice de donde comienza la variable
-	.nextChar:
-
-		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
-		call isDigit
-		cmp r10, 1
-			jz moverValor		;if actual char is a variable, add the char into the varTvariables
-		.continuar
-		inc r8
-		cmp byte[rsi + r8], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar 
-ret
-
-;siempre que llos bytes siguientes sean numeros los va insertando 
-moverValor:
-	mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
-	.nextDigit:
-		call hacerCampoEnVarToOperate
-		mov  byte [varToOperate + rdx-1], al 
-		inc r8
-		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
-		call isDigit
-		cmp r10, 1
-			jz .nextDigit
-
-jmp buscarVarEnVarToOperate				;busca otra variable
-
-hacerCampoEnVarToOperate:
-	push r9
-	push rbx
-	
-	mov r9, r14		;guardamos en r9 el indice final del varToPrint
-	PrevChar:
-		mov bl, byte [varToOperate + r14]		;se mueve el ultimo caracter de la variable
-		mov byte [varToOperate + r14+1], bl	;se mueve el ultimo caracter una posicion a la derecha
-		dec r9
-		cmp rdx, r9				;si no ha llegado al final continua con el siguiente char/byte
-			jnz PrevChar 
-		inc rdx
-		inc r14
-	
-	pop rbx
-	pop r9
-ret
-
 
 ;------------------------------------------------------------------------------------------------------------
 ;											addIntIntoTheVar 
