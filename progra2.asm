@@ -470,6 +470,50 @@ isVariable:
 	inc r10	
 ret
 
+;Limpiar variables---------------------------------------------------------------------------------------------
+;r14 indice de varToOperate
+;r15 indice de varToPrint
+;--------------------------------------------------------------------------------------------------------------
+LimpiarVarToOperate:
+    push r14
+    xor r14,r14
+    limpiarOperate:
+      mov byte [varToOperate + r14],0h
+      inc r14
+      cmp byte[varToOperate + r14], 0h				;si no ha llegado al final continua con el siguiente char/byte
+	    jnz limpiarOperate
+   pop r14
+ret
+
+LimpiarVarToPrint:
+    push r15
+    xor r15,r15
+    limpiarPrint:
+        mov byte [varToPrint + r15],0h
+	inc r15
+	cmp byte[varToPrint + r15], 0h				;si no ha llegado al final continua con el siguiente char/byte
+	      jnz limpiarPrint
+   pop r15
+ ret
+ 
+;--------------------------------------------------------------------------------------------------------------------
+;Obtener Operandos
+;--------------------------------------------------------------------------------------------------------------------
+
+ ObtenerOperandos:
+    nextOperando: 
+      mov rsi,[varToOperate + rcx]; Direccion de inicio del primer operando
+      call atoi
+      mov bl,byte[varToOperate + rcx]; Direccion del operador
+      
+      inc rcx
+      mov rsi,[varToOperate + rcx] ; Direccion de inicio del segundo operando
+      call atoi
+      mov rbx,rax  
+ret
+ 
+ 
+ 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
 ;	S: RCX almacena la cantidad de digitos transformados
