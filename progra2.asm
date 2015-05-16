@@ -130,7 +130,7 @@ cambiarVariables:
 		
 		call isVariable								;put in r10 1 if al is a symbol, else put 0
 		cmp r10, 1
-			jz buscarVarEnVarToOperate					;if actual char is a variable, add the char into the varTvariables
+			jz cambiarVariable					;if actual char is a variable, add the char into the varTvariables
 
 		.continuar
 		inc rcx
@@ -166,7 +166,7 @@ getPosVar:
 		inc rdx
 
 		cmp byte[rsi + rdx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar
+			jnz .nextChar					;si llega al final y no encontro la variable devuelve un -1
 		mov rdx, -1
 	.exit
 	pop rbx
@@ -201,17 +201,45 @@ ret
 
 ;siempre que los bytes siguientes sean numeros los va insertando 
 movValue:
+	push rax
+	
 	mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
 	.nextDigit:
-		call hacerCampoEnVarToOperate
-		mov  byte [varToOperate + rdx-1], al 
+		call liberarByteVarToOperate
+		mov  byte [varToOperate + rdx], al 
+		inc rdx
 		inc r8
 		mov al, byte [rsi + r8]	 			;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
 		call isDigit
 		cmp r10, 1
 			jz .nextDigit
+			
+	pop rax
+ret
 
-jmp buscarVarEnVarToOperate				;busca otra variable
+
+
+liberarByteVarToOperate:
+	push r9
+	push rbx
+	push rdx
+	
+	mov r9, r14		;guardamos en r9 el indice final del varToPrint
+	.PrevChar:
+		dec r9
+
+		mov bl, byte [varToOperate + r9]		;se mueve el ultimo caracter de la variable
+		mov byte [varToOperate + r9+1], bl	;se mueve el ultimo caracter una posicion a la derecha
+		
+		cmp rdx, r9				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .PrevChar 
+		inc r14
+	
+	pop rdx
+	pop rbx
+	pop r9
+ret
+
 
 ;------------------------------------------------------------------------------------------------------------
 ;											buscarVarEnVarToOperate 
