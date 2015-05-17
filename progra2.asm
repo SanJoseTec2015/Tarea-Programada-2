@@ -539,24 +539,63 @@ LimpiarVarToPrint:
    pop r15
  ret
  
-;--------------------------------------------------------------------------------------------------------------------
-;Obtener Operandos
-;--------------------------------------------------------------------------------------------------------------------
-
- ObtenerOperandos:
-    nextOperando: 
-      mov rsi,[varToOperate + rcx]; Direccion de inicio del primer operando
-      call atoi
-      mov bl,byte[varToOperate + rcx]; Direccion del operador
+;------------------------------------------------------------------------------------------------------------------------------------------------
+;Llama a buscarInicioPrimerOperando para obtener la direccion de inicio del primer operando y luego a obtenerOperandos para poder pasar los operandos 
+;a los registros rax y rbx.
+;-------------------------------------------------------------------------------------------------------------------------------------------------
+Operar:
+  call buscarInicioPrimerOperando
+  call ObtenerOperandos
+ret
       
+ObtenerOperandos: 
+      mov rsi,varToOperate
+      call atoi ;Obtiene primer operando y se guarda en rax
+      mov bl,byte[varToOperate + rcx]; guarda el operador
       inc rcx
-      mov rsi,[varToOperate + rcx] ; Direccion de inicio del segundo operando
-      call atoi
+      call atoi ;Obtiene segudo operando y se guarda en rbx
       mov rbx,rax  
 ret
- 
- 
- 
+
+;-------------------------------------------------------------------------------------------------------------------------------------------------
+;Busca el inicio del primer operando, va incrementando hasta encontrarse con un operador, para luego llamar a InicioOperando y decrementar hasta 
+;encontrar el inicio del primer operando.
+;-------------------------------------------------------------------------------------------------------------------------------------------------
+buscarInicioPrimerOperando:
+    push r14
+    ;xor r14,r14
+      nextOperando:
+	mov al,byte[varToOperate +r14]
+	isActualCharoperador
+	cmp r10,1 ;Si el char actual es un operador entonces llama al procedimiento InicioOperando para buscar el inicio del primer operando
+	  jnz InicioOperando
+	continuarOperando:
+	  inc r14
+	  cmp byte[varToOperate + r14], 0h ; si no ha llegado al final continua
+	    jnz nextOperando
+    pop r14
+ret
+;------------------------------------------------------------------------------------------------------------------------------------------
+;Decrementa el indice r14 desde el operador para buscar el inicio del primer operando, hasta toparse con otro operador o llegar al inicio
+; de varToOperate
+;------------------------------------------------------------------------------------------------------------------------------------------
+InicioOperando:
+    push r14
+    IraInicio:
+      dec r14
+      cmp r14,0 ;Al decrementar ,si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes 
+        jz guardarDireccion
+      isDigit
+      cmp r10,1 ; si es digito sigue decrementando hasta encontrar un operador
+        jnz IraInicio
+      inc r14 ; si al decrementar el char actual no es un digito entonces es un operador, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
+      mov rcx,r14
+      guardarDireccion:
+	mov rcx,r14
+    pop r14
+      
+ret
+
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
 ;	S: RCX almacena la cantidad de digitos transformados
