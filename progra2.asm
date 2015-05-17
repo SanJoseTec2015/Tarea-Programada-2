@@ -36,6 +36,7 @@ varInt : db '#',10
 ;varIntToStringLEN 	equ $ - varIntToString
 
 varDebug: db 'ok',10
+varDebug2: db 'ok2',10
 
 	section .text						;Section containing code
 
@@ -57,14 +58,14 @@ _start:
 
 	call printVarToOperate
 	
-	call quitarParentesisSobrantes
-	
-	call printVarToOperate
-
-	
 	call cambiarVariables
 	
 	call printVarToOperate
+	
+	call quitarParentesisSobrantes
+	
+	call printVarToOperate
+	
 	;call ponerAsteriscos
 	;call validarParentesisSobrantes
 	;call procesarVarToOperate
@@ -152,6 +153,9 @@ validarPonerAsteriscos:
 	
 	cmp al, '('
 		jz .exit
+		
+	cmp al, 0h
+		jz .exit
 	
 	call isDigit						
 	mov r8, r10
@@ -167,6 +171,8 @@ validarPonerAsteriscos:
 	cmp r10, 1
 		jz .exit
 		
+	cmp al, 0h
+		jz .exit
 	
 	cmp al, ')'						;compara si el sieguiente es un )... 
 		jz .exit
@@ -185,22 +191,22 @@ jmp ponerAsteriscos.continuar
 
 quitarParentesisSobrantes:
 	push rcx
-	
+
 	xor rcx, rcx
 	.nextChar:
 		cmp byte [varToOperate + rcx], '('
 			jz validarCierreParentesis
 			
-		cmp r10, -1
-			jnz .quitarParentesis
-			
 		.continuar:
 		inc rcx									;indice
+
 		cmp byte [varToOperate + rcx], 0h 				 ;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar 
+		
 		jmp .exit
 			
 	.quitarParentesis:
+		call debug
 		mov rdx, rcx
 		dec rdx
 		call removeChar
@@ -211,32 +217,39 @@ quitarParentesisSobrantes:
 ret
 
 validarCierreParentesis
-
 	mov rdx, rcx
 	.nextChar:
+		inc rdx									;indice
 		cmp byte [varToOperate + rdx], ')'
 			jz .quitarParentesis
 			
-		inc rdx									;indice
 		mov al, byte [varToOperate + rdx]
+		call isDigit
 		cmp r10, 1 				 ;si no ha llegado al final continua con el siguiente char/byte
 			jz .nextChar 
 		.exit:
-			mov r10, -1
 			jmp quitarParentesisSobrantes.continuar
 					
 	.quitarParentesis:
-		call removeChar	
+		mov r10, 1
+		call removeChar
+		mov rdx, rcx
+		call removeChar
 jmp quitarParentesisSobrantes.continuar
 
 removeChar:
+	push rax
+	push r8
 	mov r8, rdx
 	.nextChar:
 		mov al, byte [varToOperate + r8 + 1]
 		mov [varToOperate + r8], al
 		inc r8							;indice
 		cmp byte [varToOperate + r8], 0h 				 ;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar 
+			jnz .nextChar
+	dec r14
+	pop r8
+	pop rax
 ret
 ;------------------------------------------------------------------------------------------------------------
 ;											cambiarVariables 
@@ -896,6 +909,25 @@ debug:
 	mov rdi, 1								;file_descriptor (code 1 stdout)
 	mov rsi, varDebug				;address of the buffer to print out
 	mov rdx, 3								;number of chars to print out
+	syscall										;system call
+	
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret	
+debug2:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varDebug2				;address of the buffer to print out
+	mov rdx, 4								;number of chars to print out
 	syscall										;system call
 	
 	pop rcx

@@ -12,4 +12,4 @@ OBJ = progra2.o
 
 all: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(SRC)
-	$(CC2) $(CFLAGS2) progra2 $(OBJ)
+	$(CC2) $(CFLAGS2) progra2 -g $(OBJ)
