@@ -28,6 +28,8 @@ varToPrint: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0
 
 varVariables: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 10
 
+varResultado: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h
+
 varOperadores : db '+', '-', '*', '/', '^', '%', 0h
 
 varSymbol : db '$', 10
@@ -211,7 +213,7 @@ validarCierreParentesis
 		call removeChar								;lo borramos
 jmp quitarParentesisSobrantes.continuar
 
-;											procesarEntrada
+;											/procesarEntrada
 ;------------------------------------------------------------------------------------------------------------
 
 ;------------------------------------------------------------------------------------------------------------
@@ -387,47 +389,6 @@ addIntIntoTheVar:
 	pop rbx
 ret
 
-procesarVarToOperate:
-
-	push r14
-
-	xor r14, r14					;indice vartoOperate
-	xor r15, r15					;indice varToPrint
-	xor rax, rax
-
-	.nextChar:
-		;call printVarToPrint
-		;Get a char from the buffer and put it in RAX
-		mov rax , qword [varToOperate + r14]				;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
-		call isOperador				;put in r10 1 if al is a symbol, else put 0
-		cmp r10, 1
-			jz .addCharIntoTheVar		;if actual char is a Number, add the char into the varToPrint and varToOperate
-			jnz .addIntIntoTheVar		;else add the stringInt into the varToPrint, call ATOI and the result adds into varToOperate
-			;en ambos se casos se esta incrementando el indice de acuerdo a los bytes transformados
-
-	.addCharIntoTheVar:
-		mov byte[varToPrint+r15], al
-		inc r15										;indice varToPrint
-		jmp .continuarProcesando
-
-	.addIntIntoTheVar:
-		push rcx										;se guarda el indice del buffer
-
-		call itoa										;el procedimiento agrega los caracteres a la variable toPrint
-		add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
-
-		pop rcx									;se regresa el indice del buffer
-
-	.continuarProcesando:						;return point for previous jumps
-
-		add r14, 8									;add 8byte=64bits
-
-		cmp qword[varToOperate + r14], 0				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar
-
-	pop r14
-ret
-
 ;------------------------------------------------------------------------------------------------------------
 ;											isDigit
 ;
@@ -549,6 +510,42 @@ LimpiarVarToPrint:
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 Operar:
 	call buscarOperacion
+	call realizarOperacion
+	call ajustarVariableToPrint
+	call printVarToPrint
+ret
+
+
+realizarOperacion:
+	cmp rax, '+'
+		jz sumar
+		
+	cmp rax, '-'
+		jz restar
+		
+	cmp rax, '*'
+		jz multiplicar
+		
+	cmp rax, '/'
+		jz dividir
+		
+	;cmp rax, '^'
+		;jz pow
+		
+	;cmp rax, '%'
+		;jz mod
+ret
+
+ajustarVariableToPrint:
+	call itoa
+
+	.nextChar:
+		mov al, byte[varToOperate+r11+rcx]
+		inc r15
+		mov byte[varToPrint+r15], al
+		inc rcx
+		cmp byte[varToOperate+r11+rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar
 ret
 
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -564,11 +561,10 @@ buscarOperacion:
 		cmp r10, 1										;Si el char actual es un operador entonces llama al procedimiento ObtenerOperandos para buscar el inicio del primer operando
 			jnz ObtenerOperandos
 
-		continuarOperando:
 		inc r14
 		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
 			jnz nextOperando
-	
+
 	pop r14
 	;TO DO SI LLEGO ACA YA NO HAY OPERACIONES PENDIENTES
 ret
@@ -578,9 +574,7 @@ ret
 ; de varToOperate
 ;------------------------------------------------------------------------------------------------------------------------------------------
 ObtenerOperandos:
-	push r14
-	
-; OBTENER EL INDICE DEL PRIMER OPERANDO
+;OBTENER EL INDICE DEL PRIMER OPERANDO
 	IraInicio:
 		dec r14
 			jz guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
@@ -593,6 +587,8 @@ ObtenerOperandos:
 
 	guardarDireccion:
 	mov rcx, r14
+	mov r15, r15										; se mueve al r15 la direccion de inicio de la operacion
+;/OBTENER EL INDICE DEL PRIMER OPERANDO
 
 	obtenerOperandos:
 		xor rbx, rbx
@@ -604,6 +600,9 @@ ObtenerOperandos:
 		call atoi											;Obtiene segudo operando y se guarda en rbx
 		mov rbx, rax									;se guarda el segundo operando en RBX
 		mov rax, rdx									;se pasa el primer operando al RAX
+		
+	mov r11, rcx										;se mueve al r11 la direccion final de la operacion
+	pop r14
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -621,7 +620,7 @@ atoi:
 	next_digit:
 		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
-		sub al, '0'							;convert from ASCII to number
+		sub al, '0'						;convert from ASCII to number
 		imul rbx, 10
 		add rbx, rax					;rbx = rbx*10 + eax
 		inc rcx
@@ -675,7 +674,7 @@ ret
 			cmp cx, 0							;Esta seccion maneja el caso cuando
 				ja itoa_3	;if CX > 0				;el numero a convertir (AX) es 0.
 			mov ax, '0'					;En este caso, el ciclo anterior
-			mov byte [varToPrint+r15+rsi], al	;no guarda valores en el stack y
+			mov byte [varToPrint+r15], al	;no guarda valores en el stack y
 			;put the char into varIntToString result
 			inc rsi
 			inc rcx
