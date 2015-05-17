@@ -32,9 +32,7 @@ varOperadores : db '+', '-', '*', '/','^', '%',0h
 varSymbol : db '$',10
 
 varInt : db '#',10
-
 ;varIntToStringLEN 	equ $ - varIntToString
-
 varDebug: db 'ok',10
 varDebug2: db 'ok2',10
 
@@ -65,7 +63,6 @@ _start:
 	call quitarParentesisSobrantes
 	
 	call printVarToOperate
-	
 	;call ponerAsteriscos
 	;call validarParentesisSobrantes
 	;call procesarVarToOperate
@@ -627,7 +624,7 @@ ret
 		xor rsi, rsi ;clear the rsi to 0
 
 		itoa_1:
-			cmp rax,0						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
+			cmp rax, 0						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
 				je itoa_2						;
 			xor rdx,rdx						;se limpia la parte alta del divisor
 			mov rbx,10
