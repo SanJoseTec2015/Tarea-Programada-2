@@ -173,7 +173,7 @@ validarPonerAsteriscos:
 	
 	cmp al, ')'						;compara si el sieguiente es un )... 
 		jz .exit
-	
+
 	mov rdx, rcx ;parametro del procedimiento, el lugar al que hay que dejar libre
 	call liberarByteVarToOperate
 	
@@ -576,7 +576,7 @@ buscarInicioPrimerOperando:
     ;xor r14,r14
       nextOperando:
 	mov al,byte[varToOperate +r14]
-	isActualCharoperador
+	isActualCharoperador:
 	cmp r10,1 ;Si el char actual es un operador entonces llama al procedimiento InicioOperando para buscar el inicio del primer operando
 	  jnz InicioOperando
 	continuarOperando:
@@ -595,7 +595,7 @@ InicioOperando:
       dec r14
       cmp r14,0 ;Al decrementar ,si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes 
         jz guardarDireccion
-      isDigit
+      call isDigit
       cmp r10,1 ; si es digito sigue decrementando hasta encontrar un operador
         jnz IraInicio
       inc r14 ; si al decrementar el char actual no es un digito entonces es un operador, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
