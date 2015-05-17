@@ -57,6 +57,11 @@ _start:
 
 	call printVarToOperate
 	
+	call quitarParentesisSobrantes
+	
+	call printVarToOperate
+
+	
 	call cambiarVariables
 	
 	call printVarToOperate
@@ -135,7 +140,7 @@ ponerAsteriscos:
 			
 		.continuar:
 		inc rcx									;indice
-		cmp rcx, r14 				 ;si no ha llegado al final continua con el siguiente char/byte
+		cmp byte [varToOperate + rcx], 0h 				 ;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar 
 	pop rcx
 ret
@@ -177,6 +182,62 @@ validarPonerAsteriscos:
 		pop r8
 		
 jmp ponerAsteriscos.continuar
+
+quitarParentesisSobrantes:
+	push rcx
+	
+	xor rcx, rcx
+	.nextChar:
+		cmp byte [varToOperate + rcx], '('
+			jz validarCierreParentesis
+			
+		cmp r10, -1
+			jnz .quitarParentesis
+			
+		.continuar:
+		inc rcx									;indice
+		cmp byte [varToOperate + rcx], 0h 				 ;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
+		jmp .exit
+			
+	.quitarParentesis:
+		mov rdx, rcx
+		dec rdx
+		call removeChar
+	jmp quitarParentesisSobrantes.continuar
+	
+	.exit
+	pop rcx
+ret
+
+validarCierreParentesis
+
+	mov rdx, rcx
+	.nextChar:
+		cmp byte [varToOperate + rdx], ')'
+			jz .quitarParentesis
+			
+		inc rdx									;indice
+		mov al, byte [varToOperate + rdx]
+		cmp r10, 1 				 ;si no ha llegado al final continua con el siguiente char/byte
+			jz .nextChar 
+		.exit:
+			mov r10, -1
+			jmp quitarParentesisSobrantes.continuar
+					
+	.quitarParentesis:
+		call removeChar	
+jmp quitarParentesisSobrantes.continuar
+
+removeChar:
+	mov r8, rdx
+	.nextChar:
+		mov al, byte [varToOperate + r8 + 1]
+		mov [varToOperate + r8], al
+		inc r8							;indice
+		cmp byte [varToOperate + r8], 0h 				 ;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar 
+ret
 ;------------------------------------------------------------------------------------------------------------
 ;											cambiarVariables 
 ;
