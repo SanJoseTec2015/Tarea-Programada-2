@@ -161,6 +161,9 @@ validarPonerAsteriscos:
 	cmp al, ')'
 		jz .exit
 
+	cmp al, ','
+		jz .exit
+
 	;se procede a poner el asterisco
 	mov rdx, rcx											;parametro del procedimiento, el lugar al que hay que dejar libre
 	call liberarByteVarToOperate
@@ -250,20 +253,18 @@ cambiarVariables:
 ret
 
 ;------------------------------------------------------------------------------------------------------------
-;											cambiarVariables
+;											cambiarVariable
 ;
 ;	Itera la variable to operate y sustitute los las variables con el valor correspondiente
 ;	E: RCX la posicion de variable para sustituir en el buffer
 ;------------------------------------------------------------------------------------------------------------
 cambiarVariable:
-
 	call getPosVar										;devuelve la posicion en RDX
 	cmp rdx, -1										;si llego al final y no la encontro retorna un -1 en rdx
 		jz cambiarVariables.continuar			;se sale del ciclo y regresa a validar las siguientes variables, hasta que haya modificado todas las de la expresion
 
 	call getPosValue									;devuelve la posicion en R8
 	call movValue										;mueve a RDX los valores numericos iniciando en la posicion R8 del buffer
-
 jmp cambiarVariable
 
 ;------------------------------------------------------------------------------------------------------------
@@ -310,16 +311,22 @@ getPosValue:
 	.exit:
 	pop rax
 ret
-;siempre que los bytes siguientes sean numeros los va insertando
+
+;------------------------------------------------------------------------------------------------------------
+;											movValue
+;	Siempre que los bytes siguientes sean numeros los va insertando
+;	E: R8 el indiice dentro del buffer con el inicio del valor de la variable
+;		RDX la posicion de la variable donde se va a insertar el valor
+;------------------------------------------------------------------------------------------------------------
 movValue:
 	push rax
 
-	mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+	mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
 	mov  byte [varToOperate + rdx], al
 
 	.nextDigit:
 		inc r8
-		mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r9 = indice
+		mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
 		call isDigit
 		cmp r10, 1
 			jnz .exit
@@ -370,7 +377,7 @@ addIntIntoTheVar:
 	mov qword[varToOperate+r14], rax
 	add r14, 8									;add 8byte=64bits
 
-	call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
+	call itoa										;el procedimiento agrega los caracteres a la variable toPrint
 	add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
 
 	mov rbx, rcx							;guardamos el numero de digitos
@@ -406,7 +413,7 @@ procesarVarToOperate:
 	.addIntIntoTheVar:
 		push rcx										;se guarda el indice del buffer
 
-		call itoaP										;el procedimiento agrega los caracteres a la variable toPrint
+		call itoa										;el procedimiento agrega los caracteres a la variable toPrint
 		add r15, rcx								;se suma el indice a la cantidad de digitos agregados a a variable
 
 		pop rcx									;se regresa el indice del buffer
@@ -537,60 +544,66 @@ LimpiarVarToPrint:
  ret
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------
-;Llama a buscarInicioPrimerOperando para obtener la direccion de inicio del primer operando y luego a obtenerOperandos para poder pasar los operandos
+;Llama a buscarOperacion para obtener la direccion de inicio del primer operando y luego a obtenerOperandos para poder pasar los operandos
 ;a los registros rax y rbx.
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 Operar:
-  call buscarInicioPrimerOperando
-  call ObtenerOperandos
-ret
-
-ObtenerOperandos:
-	mov rsi, varToOperate
-	call atoi ;Obtiene primer operando y se guarda en rax
-	mov bl, byte[varToOperate + rcx]; guarda el operador
-	inc rcx
-	call atoi ;Obtiene segudo operando y se guarda en rbx
-	mov rbx, rax
+	call buscarOperacion
 ret
 
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
-;Busca el inicio del primer operando, va incrementando hasta encontrarse con un operador, para luego llamar a InicioOperando y decrementar hasta
+;Busca el inicio del primer operando, va incrementando hasta encontrarse con un operador, para luego llamar a ObtenerOperandos y decrementar hasta
 ;encontrar el inicio del primer operando.
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
-buscarInicioPrimerOperando:
+buscarOperacion:
 	push r14
-	;xor r14, r14
+	xor r14, r14
 	nextOperando:
-	mov al, byte[varToOperate +r14]
-	isActualCharoperador:
-	cmp r10, 1 ;Si el char actual es un operador entonces llama al procedimiento InicioOperando para buscar el inicio del primer operando
-	jnz InicioOperando
-	continuarOperando:
-	inc r14
-	cmp byte[varToOperate + r14], 0h ; si no ha llegado al final continua
-		jnz nextOperando
+		mov al, byte[varToOperate +r14]
+		call isOperador
+		cmp r10, 1										;Si el char actual es un operador entonces llama al procedimiento ObtenerOperandos para buscar el inicio del primer operando
+			jnz ObtenerOperandos
+
+		continuarOperando:
+		inc r14
+		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
+			jnz nextOperando
+	
 	pop r14
+	;TO DO SI LLEGO ACA YA NO HAY OPERACIONES PENDIENTES
 ret
+
 ;------------------------------------------------------------------------------------------------------------------------------------------
 ;Decrementa el indice r14 desde el operador para buscar el inicio del primer operando, hasta toparse con otro operador o llegar al inicio
 ; de varToOperate
 ;------------------------------------------------------------------------------------------------------------------------------------------
-InicioOperando:
+ObtenerOperandos:
 	push r14
+	
+; OBTENER EL INDICE DEL PRIMER OPERANDO
 	IraInicio:
-	dec r14
-	cmp r14, 0 ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
-		jz guardarDireccion
-	call isDigit
-	cmp r10, 1 ; si es digito sigue decrementando hasta encontrar un operador
-		jnz IraInicio
-	inc r14 ; si al decrementar el char actual no es un digito entonces es un operador, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
-	mov rcx, r14
+		dec r14
+			jz guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
+
+		mov al, byte[varToOperate +r14]
+		call isDigit
+		cmp r10, 1 				; si es digito sigue decrementando hasta encontrar el inicio
+			jnz IraInicio
+		inc r14 ; si al decrementar el char actual no es un digito entonces es el inicio del numero, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
+
 	guardarDireccion:
 	mov rcx, r14
-	pop r14
 
+	obtenerOperandos:
+		xor rbx, rbx
+
+		mov rsi, varToOperate
+		call atoi											;Obtiene primer operando y se guarda en rax
+		mov rdx, rax									;se guarda el primer operando en RDX
+		inc rcx
+		call atoi											;Obtiene segudo operando y se guarda en rbx
+		mov rbx, rax									;se guarda el segundo operando en RBX
+		mov rax, rdx									;se pasa el primer operando al RAX
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -605,7 +618,6 @@ atoi:
 
 	xor rbx, rbx;clear the rbx to 0
 	xor rax, rax				;clear the rax to 0
-
 	next_digit:
 		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
@@ -619,12 +631,9 @@ atoi:
 		call isDigit
 		cmp r10, 1
 			jz next_digit
-		;cmp byte[rsi + rcx +1] , 0h
-			;jnz next_digit
 
 	.exit:
-	mov rax, rbx						;se mueve al registro rax el resultado
-
+		mov rax, rbx						;se mueve al registro rax el resultado
 	pop r10
 	pop rcx
 	pop rbx
@@ -634,12 +643,11 @@ ret
 ;	E: RAX el numero a convertir
 ;	S: RCX almacena la cantidad de digitos transformados
 ;------------------------------------------------------------------------------------------------------------
-	itoaP:
-
+	itoa:
 		push rbx
 		push rdx
 		push rsi
-		;El ciclo itoaP_1 extrae los digitos del menos al mas significativo de AX y los
+		;El ciclo itoa_1 extrae los digitos del menos al mas significativo de AX y los
 		;guarda en el stack. Al finalizar el ciclo el digito mas significativo esta
 		;arriba del stack.
 
@@ -653,19 +661,19 @@ ret
 		xor rcx, rcx ;clear the rcx to 0;contiene el numero de digitos
 		xor rsi, rsi ;clear the rsi to 0
 
-		itoaP_1:
-			cmp rax, 0						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoaP_2
-				je itoaP_2						;
+		itoa_1:
+			cmp rax, 0						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
+				je itoa_2						;
 			xor rdx, rdx						;se limpia la parte alta del divisor
 			mov rbx, 10
 			div rbx							;RDX:RAX / RBX
 			push rdx							;Guardamos en la pila el resultado
 			inc rcx								;CX contiene el numero de digitos
-			jmp itoaP_1
+			jmp itoa_1
 
-		itoaP_2:
+		itoa_2:
 			cmp cx, 0							;Esta seccion maneja el caso cuando
-				ja itoaP_3	;if CX > 0				;el numero a convertir (AX) es 0.
+				ja itoa_3	;if CX > 0				;el numero a convertir (AX) es 0.
 			mov ax, '0'					;En este caso, el ciclo anterior
 			mov byte [varToPrint+r15+rsi], al	;no guarda valores en el stack y
 			;put the char into varIntToString result
@@ -673,108 +681,20 @@ ret
 			inc rcx
 			jmp salirItoa							;CX tiene el valor 0
 
-		itoaP_3:
+		itoa_3:
 			pop rax							;Extraemos los numero del stack
 			add rax, '0'						;lo pasamos a su valor ascii
 			mov [varToPrint+r15+rsi], al		;lo guardamos en la cadena final
 			inc rsi								;incrementamos el indice
-			cmp rsi, rcx						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoaP_2
+			cmp rsi, rcx						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
 				je salirItoa
-			jmp itoaP_3
+			jmp itoa_3
 			salirItoa:
 
 		pop rsi
 		pop rdx
 		pop rbx
-
 	ret
-
-;Write the results to the stdout
-write:
-	push rax
-	push rdi
-	push rsi
-	push rdx
-
-	;mov byte[varIntToString+rcx], 10	;agregamos un cambio de linea al final
-	inc rcx
-
-	mov rax, 1								;sys_write (code 1)
-	mov rdi, 1								;file_descriptor (code 1 stdout)
-	;mov rsi, varIntToString			;address of the buffer to print out
-	mov rdx, rcx							;number of chars to print out
-;	call resultado
-
-	syscall										;system call
-	;Jump to read the next bytes
-	pop rdx
-	pop rsi
-	pop rdi
-	pop rax
-	jmp done
-ret
-
-;******************************************************************************
-;						OPERACIONES DE VALIDACION
-
-validarParentesisSobrantes:
-	push rax
-	push rbx
-	push rcx
-
-	mov rbx, r14		;almacenamos la cantidad de bytes de la variable
-
-	xor rcx, rcx		;reiniciamos el contador
-	.nextChar:
-		mov rax, qword [varToOperate + rcx]
-		cmp rax, '('	;if al is a symbol
-			jz validarCierre
-
-		add rcx, 8						;incrementa el indice dentro de la variable de simbolos para leer el siguiente
-		cmp rcx, rbx	;si no ha llegado al final continua con el siguiente simbolo
-			jnz .nextChar
-			jz .exit
-
-	removerParentesis:
-		call ProcRemoverParentesis
-		jmp validarParentesisSobrantes.nextChar
-
-	ProcRemoverParentesis:
-		push rcx
-		push rax
-			mov rax, [varToOperate + rcx + 8]			;se mueve el siguiente caracter
-			mov qword [varToOperate + rcx], rax		;sobreescribo el caracter actual con el siguiente
-			add rcx, 8
-			.recorrer:
-				mov rax, [varToOperate + rcx + 8]			;se mueve el siguiente caracter
-				mov qword [varToOperate + rcx], rax		;sobreescribo el caracter actual con el siguiente
-				add rcx, 8
-				cmp rcx, rbx							;si no ha llegado al final continua con el siguiente simbolo
-					ja .recorrer
-		pop rax
-		pop rcx
-	ret
-
-	validarCierre:
-
-		cmp [rcx + 16], rbx	;si no ha llegado al final continua con el siguiente simbolo
-			jb validarParentesisSobrantes.exit
-
-		mov rax, ')'
-		cmp rax, qword [varToOperate + rcx + 16]	;(x) compara el caracter actual con dos caracteres siguientes
-			jz removerParentesis
-
-	validarParentesisSobrantes.exit
-		pop rcx
-		pop rbx
-		pop rax
-ret
-
-
-
-
-;******************************************************************************
-
 
 ;******************************************************************************
 ;						OPERACIONES ARITMETICAS
@@ -798,12 +718,13 @@ ret
 dividir:
 	push rdx
 
+	xor rdx, rdx
 	div rbx ;RDX:RAX / RBX
 
 	pop rdx
 ret
+;						/OPERACIONES ARITMETICAS
 ;******************************************************************************
-
 
 done:
 	mov rax, 60							;sys_exit (code 60)
@@ -840,8 +761,8 @@ printVarToPrint:
 
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, varToPrint;varToOperate;				;address of the buffer to print out
-	mov rdx, r15						;number of chars to print out
+	mov rsi, varToPrint					;address of the buffer to print out
+	mov rdx, r15							;number of chars to print out
 	syscall										;system call
 
 	pop r15
@@ -856,20 +777,21 @@ printVarToOperate:
 	push rdi
 	push rsi
 	push rdx
-	push r14
 	push rcx
 
-	mov qword[varToOperate+r14], 10	;agregamos un cambio de linea
-	add r14, 8
+	mov byte[varToOperate+r14], 10	;agregamos un cambio de linea
+	inc r14
 
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, varToOperate;varToOperate;				;address of the buffer to print out
-	mov rdx, r14						;number of chars to print out
+	mov rsi, varToOperate				;address of the buffer to print out
+	mov rdx, r14							;number of chars to print out
 	syscall										;system call
 
+	dec r14
+	mov byte[varToOperate+r14], 0h	;volvemos a insertar el caracter null al final
+
 	pop rcx
-	pop r14
 	pop rdx
 	pop rsi
 	pop rdi
@@ -885,7 +807,7 @@ debug:
 
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, varDebug				;address of the buffer to print out
+	mov rsi, varDebug					;address of the buffer to print out
 	mov rdx, 3								;number of chars to print out
 	syscall										;system call
 
@@ -895,6 +817,7 @@ debug:
 	pop rdi
 	pop rax
 ret
+
 debug2:
 	push rax
 	push rdi
@@ -909,43 +832,6 @@ debug2:
 	syscall										;system call
 
 	pop rcx
-	pop rdx
-	pop rsi
-	pop rdi
-	pop rax
-ret
-
-
-debugS:
-	push rax
-	push rdi
-	push rsi
-	push rdx
-
-	mov rax, 1								;sys_write (code 1)
-	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, varSymbol					;address of the buffer to print out
-	mov rdx, 2								;number of chars to print out
-	syscall										;system call
-	pop rdx
-	pop rsi
-	pop rdi
-	pop rax
-ret
-
-
-debugI:
-	push rax
-	push rdi
-	push rsi
-	push rdx
-
-	mov rax, 1								;sys_write (code 1)
-	mov rdi, 1								;file_descriptor (code 1 stdout)
-	mov rsi, varInt				;address of the buffer to print out
-	mov rdx, 2								;number of chars to print out
-	syscall										;system call
-
 	pop rdx
 	pop rsi
 	pop rdi
