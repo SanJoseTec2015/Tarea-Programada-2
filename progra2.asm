@@ -57,7 +57,9 @@ _start:
 
 	call quitarParentesisSobrantes
 
-	call CicloPrincipal
+	;call CicloPrincipal
+	mov r9, '+'
+	call Operar
 
 	jmp done
 
@@ -237,26 +239,23 @@ ret
 ;Copia byte por byte lo que esta en varToPrint a varToOperate
 ;------------------------------------------------------------------------------------------------------------------
 moverVarToPrintToVarToOperate:
-git p	push r14
-	push r15
 	 xor r14,r14
 	 xor r15,r15
-	 next_byte:
+
+	 .next_byte:
 		mov al, byte[varToPrint + r15]
 		mov byte[varToOperate + r14], al
 		inc r14
 		inc r15
 		cmp byte [varToPrint + r15], 0h
-			jnz next_byte
-	pop r14
-	pop r15
+			jnz .next_byte
 ret
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ; Este procedimiento recorre varToOperate y revisa si solo quedan digitos, si es asi quiere decir que ya no hay operaciones por resolver.
 ; Deja en r10 un  1 si en varToOperate solo hay digitos.
 ;-----------------------------------------------------------------------------------------------------------------------------------------
- revisarDigitosinVartoOperate:
+ revisarDigitosInVarToOperate:
 	push r14
 	xor r14,r14
 	xor r10, r10	;pone un 0
@@ -530,6 +529,7 @@ LimpiarVarToOperate:
 		inc r14
 		cmp byte[varToOperate + r14], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz limpiarOperate
+	xor r14, r14
 ret
 
 LimpiarVarToPrint:
@@ -539,6 +539,7 @@ LimpiarVarToPrint:
 		inc r15
 		cmp byte[varToPrint + r15], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz limpiarPrint
+	xor r15, r15
  ret
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------
@@ -557,7 +558,8 @@ CicloPrincipal:
 		inc rcx													;incrementa el indice dentro de la variable de simbolos para leer el siguiente
 		cmp byte[varOperadores + rcx], 0h	;si no ha llegado al final continua con el siguiente simbolo
 			jnz .nextSymbol
-
+	
+	.exit:
 	pop rcx
 ret
 
@@ -565,7 +567,7 @@ Operar:
 	call LimpiarVarToPrint
 	call buscarOperacion
 	cmp r10, -1
-		jz .exit
+		jz Operar.exit
 	call realizarOperacion
 	call ajustarVariableToPrint
 	call printVarToPrint
@@ -575,8 +577,8 @@ Operar:
 jmp Operar
 
 	.exit
-	call quitarParentesisSobrantes
-	
+		call debug2
+		call printVarToOperate
 ret
 
 realizarOperacion:
@@ -614,8 +616,8 @@ ajustarVariableToPrint:
 ret
 
 addCharVarToPrint:
-		mov byte[varToPrint+r15], al
-		inc r15
+	mov byte[varToPrint+r15], al
+	inc r15
 ret
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 ;Busca el inicio del primer operando, va incrementando hasta encontrarse con un operador, para luego llamar a ObtenerOperandos y decrementar hasta
@@ -634,7 +636,6 @@ buscarOperacion:
 		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
 			jnz .nextOperando
 	.exit:
-	pop r14
 	mov r10, -1 ;TO DO SI LLEGO ACA YA NO HAY OPERACIONES PENDIENTES
 ret
 
