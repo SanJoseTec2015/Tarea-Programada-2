@@ -238,6 +238,26 @@ removeChar:
 	pop rax
 ret
 
+;------------------------------------------------------------------------------------------------------------------
+;Copia byte por byte lo que esta en varToPrint a varToOperate
+;------------------------------------------------------------------------------------------------------------------
+moverVarToPrintToVarToOperate:
+   push r14
+   push r15
+    xor r14,r14
+    xor r15,r15
+    next_byte:
+      mov al, byte [varToPrint r15]
+      mov byte[varToOperate + r14], al
+      inc r14
+      inc r15
+      cmp byte [varToPrint + r15],0h
+	jnz next_byte
+  pop r14
+  pop r15
+ret
+
+
 ;------------------------------------------------------------------------------------------------------------
 ;											cambiarVariables
 ;
