@@ -679,6 +679,45 @@ ObtenerOperandos:
 	pop rcx
 ret
 
+;----------------------------------------------------------------------------------------------------------------------------------
+;Este procedimiento  va a iterar varToOperate hasta encontrar el primer ')' 
+;----------------------------------------------------------------------------------------------------------------------------------
+buscarOperacionParentesis:
+    push r14
+    xor r14,r14
+    nextParentesis:
+	  mov al, byte[varToOperate +r14]
+	  cmp al,')'
+	    jz buscarOperador
+	continuar:
+	  inc r14
+	  cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
+	    jnz nextParentesis
+
+    pop r14
+	
+ret
+;--------------------------------------------------------------------------------------------------------------
+;Va decrementando el r14 despues del primer ')' hasta encontrar el operador que sea igual a r9b, el cual seria
+;la operación actual
+;--------------------------------------------------------------------------------------------------------------
+buscarOperador:
+    push r14
+    IraOperador:
+	dec r14
+	mov al, byte[varToOperate +r14]
+	cmp al,r9b 				
+		jz ObtenerOperandos
+	dec r14
+	cmp byte[varToOperate + r14], '('	;si no ha llegado al final continua
+		 jnz .continuar
+	.continuar:
+	   inc r14
+	   jmp IraOperador
+    pop r14
+ ret
+    
+
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
 ;	S: RAX el numero convertido a int
