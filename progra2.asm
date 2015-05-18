@@ -582,6 +582,7 @@ jmp Operar
 ret
 
 realizarOperacion:
+	
 	cmp r9b, '+'
 		jz sumar
 		
@@ -644,6 +645,9 @@ ret
 ; de varToOperate
 ;------------------------------------------------------------------------------------------------------------------------------------------
 ObtenerOperandos:
+	cmp byte[varToOperate +r14+1], '-'
+		jz IraInicio
+
 	mov al, byte[varToOperate +r14+1]
 	call isDigit
 	cmp r10, 0
@@ -659,20 +663,23 @@ ObtenerOperandos:
 		dec r14
 			jz .guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
 		mov al, byte[varToOperate +r14-1]
-
 		call isDigit
 		cmp r10, 1 				; si es digito sigue decrementando hasta encontrar el inicio
 			jz IraInicio
+		
 	.guardarDireccion:
 	mov r15, r14										; se mueve al r15 la direccion de inicio de la operacion
 ;/OBTENER EL INDICE DEL PRIMER OPERANDO
-
 	obtenerOperandos:
 	push rcx
-
 		call atoi											;Obtiene primer operando y se guarda en rax
 		mov rdx, rax									;se guarda el primer operando en RDX
 		inc r14												;se incrementa para pasar a el siguiente operando
+		cmp byte[varToOperate+r14] , '-'
+			jnz segundoOperando
+		inc r14											;si el segundo operando es negativo, se salta el signo
+		mov r8, 1
+		segundoOperando:
 		call atoi											;Obtiene segudo operando y se guarda en rbx
 		mov rbx, rax
 		mov rax, rdx
@@ -686,6 +693,9 @@ ret
 atoi:
 	push rbx
 	push r10
+	push r11
+	
+	mov r11, r14							;guardamos la posicion de inicio del del numero
 
 	xor rbx, rbx;clear the rbx to 0
 	next_digit:
@@ -701,8 +711,18 @@ atoi:
 		cmp r10, 1
 			jz next_digit
 
+	cmp r11, 0
+		jz .exit
+		
+	.validarNegarNumero:
+		cmp byte [varToOperate + r11-1], '-'		;si el numero transformado tenia un signo de resta, se niega
+			jnz .exit
+		neg rbx
+		mov r10, 1
 	.exit:
-		mov rax, rbx						;se mueve al registro rax el resultado
+	mov rax, rbx						;se mueve al registro rax el resultado
+	
+	pop r11
 	pop r10
 	pop rbx
 ret
@@ -766,12 +786,18 @@ ret
 
 ;******************************************************************************
 ;						OPERACIONES ARITMETICAS
+
 sumar:
-	add rax, rbx
+	add rax, rbx		;si el numero es resta el segundo numero previamente, se nego,
+	js ponerSigno
 ret
 
 restar:
-	sub rax, rbx
+	cmp r8, 1
+		jnz .op
+	neg rbx
+	.op	
+	add rax, rbx		;si el numero es resta el segundo numero previamente, se nego,
 	js ponerSigno
 ret
 
@@ -788,6 +814,7 @@ multiplicar:
 	imul rbx
 
 	pop rdx
+	js ponerSigno
 ret
 
 dividir:
@@ -797,6 +824,7 @@ dividir:
 	div rbx ;RDX:RAX / RBX
 	;TO DO si rbx es 0 lanzar error de calculo
 	pop rdx
+	js ponerSigno
 ret
 
 mod:
@@ -807,6 +835,8 @@ mod:
 	;TO DO si rbx es 0 lanzar error de calculo
 	mov rax, rdx
 	pop rdx
+	js ponerSigno
+
 ret
 
 pow
@@ -826,6 +856,8 @@ pow
 	cmp rdx, 0
 		;jnz	;TO DO error overflow
 	pop rdx
+	js ponerSigno
+
 ret
 
 casoPow0:
