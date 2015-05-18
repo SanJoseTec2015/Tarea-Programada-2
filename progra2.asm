@@ -35,6 +35,24 @@ varInt : db '#', 10
 varDebug: db 'ok', 10
 varDebug2: db 'ok2', 10
 
+;-----------------------------------------------------------------------------------------------------------------------------------
+;Variables para imprimir errores
+;-----------------------------------------------------------------------------------------------------------------------------------
+varErrorCantidadVariables: db 'Error hay más de 20 variables',10
+CantidadVariablesLEN	equ $ - varErrorCantidadVariables
+
+varErrorVariableNoExistente: db 'Error la variable a sustituir no existe en la expresión',10
+VariableNoExistenteLEN	equ $ - varErrorVariableNoExistente
+
+varErrorResultadoMayora64bits: db 'Error el resultado de la expresión es mayor a 64 bits',10
+ResultadoMayorLEN	equ $ - varErrorResultadoMayora64bits
+
+varErrorDivisorCero: db 'Error el divisor no puede ser cero',10
+DivisorCeroLEN	equ $ - varErrorDivisorCero
+
+varErrorArgumentosCeroEnDivision: db 'Error los argumentos en la división no pueden ser cero',10
+ArgumentosCeroLEN	equ $ - varErrorArgumentosCeroEnDivision
+
 	section .text						;Section containing code
 
 global _start						;Linker needs this to find the entry point!
@@ -913,6 +931,108 @@ printVarToOperate:
 	pop rdi
 	pop rax
 ret
+
+;------------------------------------------------------------------------------------------------------------------------------------
+;Prints de errores
+;------------------------------------------------------------------------------------------------------------------------------------
+printErrorCantidadVariables:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varErrorCantidadVariables					;address of the buffer to print out
+	mov rdx, CantidadVariablesLEN								;number of chars to print out
+	syscall										;system call
+
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
+
+printErrorVariableNoExistente:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varErrorVariableNoExistente					;address of the buffer to print out
+	mov rdx, VariableNoExistenteLEN								;number of chars to print out
+	syscall										;system call
+
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
+
+printErrorResultadoMayora64bits:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varErrorResultadoMayora64bits					;address of the buffer to print out
+	mov rdx, ResultadoMayorLEN								;number of chars to print out
+	syscall										;system call
+
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
+printErrorDivisorCero:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varErrorDivisorCero					;address of the buffer to print out
+	mov rdx, DivisorCeroLEN								;number of chars to print out
+	syscall										;system call
+
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
+printErrorArgumentoCeroEnDivision:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varErrorArgumentosCeroEnDivision					;address of the buffer to print out
+	mov rdx, ArgumentosCeroLEN								;number of chars to print out
+	syscall										;system call
+
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
+
 
 debug:
 	push rax
