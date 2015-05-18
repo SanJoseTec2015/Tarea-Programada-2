@@ -51,17 +51,19 @@ _start:
 
 	call printVarToOperate
 
-	call ponerAsteriscos
+	;call ponerAsteriscos
 
-	call printVarToOperate
+	;call printVarToOperate
 
-	call cambiarVariables
+	;call cambiarVariables
 
-	call printVarToOperate
+	;call printVarToOperate
 
-	call quitarParentesisSobrantes
+	;call quitarParentesisSobrantes
 
-	call printVarToOperate
+	;call printVarToOperate
+
+	call Operar
 
 	jmp done
 
@@ -483,25 +485,21 @@ ret
 ;r15 indice de varToPrint
 ;--------------------------------------------------------------------------------------------------------------
 LimpiarVarToOperate:
-	push r14
 	xor r14, r14
 	limpiarOperate:
-	mov byte [varToOperate + r14], 0h
-	inc r14
-	cmp byte[varToOperate + r14], 0h				;si no ha llegado al final continua con el siguiente char/byte
-		jnz limpiarOperate
-   pop r14
+		mov byte [varToOperate + r14], 0h
+		inc r14
+		cmp byte[varToOperate + r14], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz limpiarOperate
 ret
 
 LimpiarVarToPrint:
-	push r15
 	xor r15, r15
 	limpiarPrint:
 		mov byte [varToPrint + r15], 0h
-	inc r15
-	cmp byte[varToPrint + r15], 0h				;si no ha llegado al final continua con el siguiente char/byte
-		jnz limpiarPrint
-   pop r15
+		inc r15
+		cmp byte[varToPrint + r15], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz limpiarPrint
  ret
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------
@@ -509,14 +507,15 @@ LimpiarVarToPrint:
 ;a los registros rax y rbx.
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 Operar:
+	call LimpiarVarToPrint
 	call buscarOperacion
 	call realizarOperacion
 	call ajustarVariableToPrint
 	call printVarToPrint
 ret
 
-
 realizarOperacion:
+	mov rax, '-'
 	cmp rax, '+'
 		jz sumar
 		
@@ -528,26 +527,27 @@ realizarOperacion:
 		
 	cmp rax, '/'
 		jz dividir
-		
 	;cmp rax, '^'
 		;jz pow
-		
 	;cmp rax, '%'
 		;jz mod
 ret
 
 ajustarVariableToPrint:
 	call itoa
-
+	add r15, rcx
 	.nextChar:
-		mov al, byte[varToOperate+r11+rcx]
-		inc r15
-		mov byte[varToPrint+r15], al
-		inc rcx
-		cmp byte[varToOperate+r11+rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+		mov al, byte[varToOperate+r11]
+		call addCharVarToPrint
+		inc r11
+		cmp byte[varToOperate+r11], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar
 ret
 
+addCharVarToPrint:
+		mov byte[varToPrint+r15], al
+		inc r15
+ret
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 ;Busca el inicio del primer operando, va incrementando hasta encontrarse con un operador, para luego llamar a ObtenerOperandos y decrementar hasta
 ;encontrar el inicio del primer operando.
@@ -557,9 +557,10 @@ buscarOperacion:
 	xor r14, r14
 	nextOperando:
 		mov al, byte[varToOperate +r14]
+		call addCharVarToPrint
 		call isOperador
 		cmp r10, 1										;Si el char actual es un operador entonces llama al procedimiento ObtenerOperandos para buscar el inicio del primer operando
-			jnz ObtenerOperandos
+			jz ObtenerOperandos
 
 		inc r14
 		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
@@ -575,19 +576,20 @@ ret
 ;------------------------------------------------------------------------------------------------------------------------------------------
 ObtenerOperandos:
 ;OBTENER EL INDICE DEL PRIMER OPERANDO
+dec r14
 	IraInicio:
+		call debug
 		dec r14
 			jz guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
-
 		mov al, byte[varToOperate +r14]
 		call isDigit
 		cmp r10, 1 				; si es digito sigue decrementando hasta encontrar el inicio
 			jnz IraInicio
-		inc r14 ; si al decrementar el char actual no es un digito entonces es el inicio del numero, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
+		;inc r14 ; si al decrementar el char actual no es un digito entonces es el inicio del numero, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
 
 	guardarDireccion:
 	mov rcx, r14
-	mov r15, r15										; se mueve al r15 la direccion de inicio de la operacion
+	mov r15, r14										; se mueve al r15 la direccion de inicio de la operacion
 ;/OBTENER EL INDICE DEL PRIMER OPERANDO
 
 	obtenerOperandos:
@@ -598,10 +600,11 @@ ObtenerOperandos:
 		mov rdx, rax									;se guarda el primer operando en RDX
 		inc rcx
 		call atoi											;Obtiene segudo operando y se guarda en rbx
+		
+		mov r11, rcx										;se mueve al r11 la direccion final de la operacion
 		mov rbx, rax									;se guarda el segundo operando en RBX
 		mov rax, rdx									;se pasa el primer operando al RAX
 		
-	mov r11, rcx										;se mueve al r11 la direccion final de la operacion
 	pop r14
 ret
 
@@ -612,12 +615,11 @@ ret
 ;------------------------------------------------------------------------------------------------------------
 atoi:
 	push rbx
-	push rcx
 	push r10
 
 	xor rbx, rbx;clear the rbx to 0
-	xor rax, rax				;clear the rax to 0
 	next_digit:
+
 		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
 		sub al, '0'						;convert from ASCII to number
@@ -634,7 +636,6 @@ atoi:
 	.exit:
 		mov rax, rbx						;se mueve al registro rax el resultado
 	pop r10
-	pop rcx
 	pop rbx
 ret
 
@@ -719,7 +720,7 @@ dividir:
 
 	xor rdx, rdx
 	div rbx ;RDX:RAX / RBX
-
+	;TO DO si rbx es 0 lanzar error de calculo
 	pop rdx
 ret
 ;						/OPERACIONES ARITMETICAS
@@ -763,6 +764,9 @@ printVarToPrint:
 	mov rsi, varToPrint					;address of the buffer to print out
 	mov rdx, r15							;number of chars to print out
 	syscall										;system call
+
+	dec r15
+	mov byte[varToPrint+r15], 0h	;volvemos a insertar el caracter null al final
 
 	pop r15
 	pop rdx
