@@ -247,7 +247,7 @@ moverVarToPrintToVarToOperate:
     xor r14,r14
     xor r15,r15
     next_byte:
-      mov al, byte [varToPrint r15]
+      mov al, byte [varToPrint + r15]
       mov byte[varToOperate + r14], al
       inc r14
       inc r15
@@ -257,6 +257,31 @@ moverVarToPrintToVarToOperate:
   pop r15
 ret
 
+;-----------------------------------------------------------------------------------------------------------------------------------------
+; Este procedimiento recorre varToOperate y revisa si solo quedan digitos, si es asi quiere decir que ya no hay operaciones por resolver.
+; Deja en r10 un  1 si en varToOperate solo hay digitos.
+;-----------------------------------------------------------------------------------------------------------------------------------------
+ revisarDigitosinVartoOperate:
+    push r14
+    xor r14,r14
+    nextByte:
+      mov al,byte [varToOperate + r14]
+      call isDigit
+      cmp r10,1
+	jz salir ; si no es digito no  modifica el r10 y se sale
+	jnz continuarRevisando; si es digito pregunta si ya llegó al final de varToOperate
+      continuarRevisando:
+	inc r14
+	cmp byte [varToOperate + r14],0h ; si no ha llegado al final de varToOperate, entonces continua revisando si hay digitos
+	    jnz nextByte
+	    jz modificar_r10 ; si ya llegó al final, quiere decir que solo habia digitos y deja en r10 un 1
+	modificar_r10:
+	  mov r10,1
+      salir:
+	pop r14
+ret
+	
+    
 
 ;------------------------------------------------------------------------------------------------------------
 ;											cambiarVariables
