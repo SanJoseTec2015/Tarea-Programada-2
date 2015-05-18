@@ -515,21 +515,21 @@ Operar:
 ret
 
 realizarOperacion:
-	mov rax, '-'
-	cmp rax, '+'
+	mov rcx, '-'
+	cmp rcx, '+'
 		jz sumar
 		
-	cmp rax, '-'
+	cmp rcx, '-'
 		jz restar
 		
-	cmp rax, '*'
+	cmp rcx, '*'
 		jz multiplicar
 		
-	cmp rax, '/'
+	cmp rcx, '/'
 		jz dividir
-	;cmp rax, '^'
+	;cmp rcx, '^'
 		;jz pow
-	;cmp rax, '%'
+	;cmp rcx, '%'
 		;jz mod
 ret
 
@@ -580,14 +580,14 @@ dec r14
 	IraInicio:
 		call debug
 		dec r14
-			jz guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
+			jz .guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
 		mov al, byte[varToOperate +r14]
 		call isDigit
 		cmp r10, 1 				; si es digito sigue decrementando hasta encontrar el inicio
 			jnz IraInicio
 		;inc r14 ; si al decrementar el char actual no es un digito entonces es el inicio del numero, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
 
-	guardarDireccion:
+	.guardarDireccion:
 	mov rcx, r14
 	mov r15, r14										; se mueve al r15 la direccion de inicio de la operacion
 ;/OBTENER EL INDICE DEL PRIMER OPERANDO
@@ -684,7 +684,7 @@ ret
 		itoa_3:
 			pop rax							;Extraemos los numero del stack
 			add rax, '0'						;lo pasamos a su valor ascii
-			mov [varToPrint+r15+rsi], al		;lo guardamos en la cadena final
+			mov byte[varToPrint+r15+rsi], al		;lo guardamos en la cadena final
 			inc rsi								;incrementamos el indice
 			cmp rsi, rcx						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
 				je salirItoa
@@ -704,6 +704,13 @@ ret
 
 restar:
 	sub rax, rbx
+	js ponerSigno
+ret
+
+ponerSigno:
+	neg rax
+	mov byte [varToPrint+r15], '-'
+	inc r15
 ret
 
 multiplicar:
