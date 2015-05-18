@@ -509,38 +509,45 @@ LimpiarVarToPrint:
 Operar:
 	call LimpiarVarToPrint
 	call buscarOperacion
+	cmp r10, -1
+		jz .exit
 	call realizarOperacion
 	call ajustarVariableToPrint
+	call printVarToOperate
 	call printVarToPrint
+	.exit
 ret
 
 realizarOperacion:
-	mov rcx, '-'
-	cmp rcx, '+'
+	mov r9, '+'
+	cmp r9, '+'
 		jz sumar
 		
-	cmp rcx, '-'
+	cmp r9, '-'
 		jz restar
 		
-	cmp rcx, '*'
+	cmp r9, '*'
 		jz multiplicar
 		
-	cmp rcx, '/'
+	cmp r9, '/'
 		jz dividir
-	;cmp rcx, '^'
+	;cmp r9, '^'
 		;jz pow
-	;cmp rcx, '%'
-		;jz mod
+	cmp r9, '%'
+		jz mod
 ret
 
 ajustarVariableToPrint:
 	call itoa
 	add r15, rcx
 	.nextChar:
-		mov al, byte[varToOperate+r11]
+
+		mov al, byte[varToOperate+r14]
 		call addCharVarToPrint
-		inc r11
-		cmp byte[varToOperate+r11], 0h				;si no ha llegado al final continua con el siguiente char/byte
+		
+		inc r14
+
+		cmp byte[varToOperate+r14], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar
 ret
 
@@ -553,7 +560,6 @@ ret
 ;encontrar el inicio del primer operando.
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 buscarOperacion:
-	push r14
 	xor r14, r14
 	nextOperando:
 		mov al, byte[varToOperate +r14]
@@ -567,7 +573,7 @@ buscarOperacion:
 			jnz nextOperando
 
 	pop r14
-	;TO DO SI LLEGO ACA YA NO HAY OPERACIONES PENDIENTES
+	mov r10, -1 ;TO DO SI LLEGO ACA YA NO HAY OPERACIONES PENDIENTES
 ret
 
 ;------------------------------------------------------------------------------------------------------------------------------------------
@@ -575,43 +581,35 @@ ret
 ; de varToOperate
 ;------------------------------------------------------------------------------------------------------------------------------------------
 ObtenerOperandos:
+
 ;OBTENER EL INDICE DEL PRIMER OPERANDO
-dec r14
 	IraInicio:
-		call debug
+
 		dec r14
 			jz .guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
-		mov al, byte[varToOperate +r14]
+		mov al, byte[varToOperate +r14-1]
+
 		call isDigit
 		cmp r10, 1 				; si es digito sigue decrementando hasta encontrar el inicio
-			jnz IraInicio
-		;inc r14 ; si al decrementar el char actual no es un digito entonces es el inicio del numero, se incrementa r14 para guardar el inicio del primer operando despues de ese operador
-
+			jz IraInicio
 	.guardarDireccion:
-	mov rcx, r14
+	
 	mov r15, r14										; se mueve al r15 la direccion de inicio de la operacion
+	inc r15
 ;/OBTENER EL INDICE DEL PRIMER OPERANDO
 
 	obtenerOperandos:
 		xor rbx, rbx
 
-		mov rsi, varToOperate
 		call atoi											;Obtiene primer operando y se guarda en rax
-		mov rdx, rax									;se guarda el primer operando en RDX
-		inc rcx
+		mov rbx, rax									;se guarda el primer operando en RDX
+		inc r14												;se incrementa para pasar a el siguiente operando
 		call atoi											;Obtiene segudo operando y se guarda en rbx
-		
-		mov r11, rcx										;se mueve al r11 la direccion final de la operacion
-		mov rbx, rax									;se guarda el segundo operando en RBX
-		mov rax, rdx									;se pasa el primer operando al RAX
-		
-	pop r14
 ret
 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
-;	S: RCX almacena la cantidad de digitos transformados
-;		RAX el numero convertido a int
+;	S: RAX el numero convertido a int
 ;------------------------------------------------------------------------------------------------------------
 atoi:
 	push rbx
@@ -621,14 +619,12 @@ atoi:
 	next_digit:
 
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + rcx]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
+		mov al, byte [varToOperate + r14]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
 		sub al, '0'						;convert from ASCII to number
 		imul rbx, 10
 		add rbx, rax					;rbx = rbx*10 + eax
-		inc rcx
-		;incrementa el indice dentro del string para ler el siguiente byte
-		;cmp byte[rsi + rcx+1], 0h	;si no ha llegado al final continua con el siguiente numero
-		mov al, byte[rsi + rcx]
+		inc r14 							;incrementa el indice dentro del string para ler el siguiente byte
+		mov al, byte[varToOperate + r14]
 		call isDigit
 		cmp r10, 1
 			jz next_digit
@@ -729,6 +725,42 @@ dividir:
 	div rbx ;RDX:RAX / RBX
 	;TO DO si rbx es 0 lanzar error de calculo
 	pop rdx
+ret
+
+mod:
+	push rdx
+
+	xor rdx, rdx
+	div rbx ;RDX:RAX / RBX
+	;TO DO si rbx es 0 lanzar error de calculo
+	mov rax, rdx
+	pop rdx
+ret
+
+pow
+
+	cmp rbx, 0
+		jz casoPow0
+	cmp rbx, 1
+		jz casoPow1
+	
+	mov rcx, rbx
+	push rdx
+	xor rdx,rdx
+	powloop:
+		imul rbx
+		dec rbx
+		jnz powloop
+	cmp rdx, 0
+		;jnz	;TO DO error overflow
+	pop rdx
+ret
+
+casoPow0:
+	mov rax, 1
+ret
+
+casoPow1:
 ret
 ;						/OPERACIONES ARITMETICAS
 ;******************************************************************************
