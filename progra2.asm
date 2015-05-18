@@ -241,7 +241,7 @@ ret
 ;Copia byte por byte lo que esta en varToPrint a varToOperate
 ;------------------------------------------------------------------------------------------------------------------
 moverVarToPrintToVarToOperate:
-	push r14
+git p	push r14
 	push r15
 	 xor r14,r14
 	 xor r15,r15
@@ -261,26 +261,24 @@ ret
 ; Deja en r10 un  1 si en varToOperate solo hay digitos.
 ;-----------------------------------------------------------------------------------------------------------------------------------------
  revisarDigitosinVartoOperate:
-    push r14
-    xor r14,r14
-    nextByte:
-      mov al,byte [varToOperate + r14]
-      call isDigit
-      cmp r10,1
-	jz salir ; si no es digito no  modifica el r10 y se sale
-	jnz continuarRevisando; si es digito pregunta si ya llegó al final de varToOperate
-      continuarRevisando:
-	inc r14
-	cmp byte [varToOperate + r14],0h ; si no ha llegado al final de varToOperate, entonces continua revisando si hay digitos
-	    jnz nextByte
-	    jz modificar_r10 ; si ya llegó al final, quiere decir que solo habia digitos y deja en r10 un 1
+	push r14
+	xor r14,r14
+	xor r10, r10	;pone un 0
+	nextByte:
+		mov al,byte [varToOperate + r14]
+		call isDigit
+		cmp r10,0
+			jz salir ; si no es digito no  modifica el r10 y se sale
+
+		inc r14
+		cmp byte [varToOperate + r14],0h ; si no ha llegado al final de varToOperate, entonces continua revisando si hay digitos
+			jnz nextByte
+		; si ya llego al final, quiere decir que solo habia digitos y deja en r10 un 1
 	modificar_r10:
-	  mov r10,1
-      salir:
+		mov r10,1
+		salir:
 	pop r14
 ret
-	
-    
 
 ;------------------------------------------------------------------------------------------------------------
 ;											cambiarVariables
@@ -337,6 +335,7 @@ getPosVar:
 	.exit
 	pop rbx
 ret
+
 ;------------------------------------------------------------------------------------------------------------
 ;											getPosValue
 ;	R8 almacena el indice de inicio del valor de la variable en el buffer
