@@ -30,7 +30,7 @@ varVariables: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h,
 
 varResultado: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h
 
-varOperadores : db '+', '-', '*', '/', '^', '%', 0h
+varOperadores : db '^', '%', '/', '*', '+', '-', 0h
 
 varSymbol : db '$', 10
 
@@ -51,19 +51,17 @@ _start:
 
 	call printVarToOperate
 
-	;call ponerAsteriscos
+	call ponerAsteriscos
 
-	;call printVarToOperate
+	call printVarToOperate
 
-	;call cambiarVariables
+	call cambiarVariables
 
-	;call printVarToOperate
+	call printVarToOperate
 
-	;call quitarParentesisSobrantes
+	call quitarParentesisSobrantes
 
-	;call printVarToOperate
-
-	call Operar
+	call CicloPrincipal
 
 	jmp done
 
@@ -213,6 +211,7 @@ validarCierreParentesis
 		call removeChar								;remueve el caracter actual (el cierre en la pos RDX del procedimiento anterior)
 		mov rdx, rcx									;le pasamos el indice del parentesis que abre (RCX indice del parentesis)
 		call removeChar								;lo borramos
+		call printVarToOperate
 jmp quitarParentesisSobrantes.continuar
 
 ;											/procesarEntrada
@@ -242,19 +241,19 @@ ret
 ;Copia byte por byte lo que esta en varToPrint a varToOperate
 ;------------------------------------------------------------------------------------------------------------------
 moverVarToPrintToVarToOperate:
-   push r14
-   push r15
-    xor r14,r14
-    xor r15,r15
-    next_byte:
-      mov al, byte [varToPrint r15]
-      mov byte[varToOperate + r14], al
-      inc r14
-      inc r15
-      cmp byte [varToPrint + r15],0h
-	jnz next_byte
-  pop r14
-  pop r15
+	push r14
+	push r15
+	 xor r14,r14
+	 xor r15,r15
+	 next_byte:
+		mov al, byte[varToPrint + r15]
+		mov byte[varToOperate + r14], al
+		inc r14
+		inc r15
+		cmp byte [varToPrint + r15], 0h
+			jnz next_byte
+	pop r14
+	pop r15
 ret
 
 
@@ -368,14 +367,14 @@ liberarByteVarToOperate:
 	push rbx
 	push rdx
 
-	mov r9, r14		;guardamos en r9 el indice final del varToPrint
+	mov r9, r14											;guardamos en r9 el indice final del varToPrint
 	.PrevChar:
 		dec r9
 
 		mov bl, byte [varToOperate + r9]		;se mueve el ultimo caracter de la variable
 		mov byte [varToOperate + r9+1], bl	;se mueve el ultimo caracter una posicion a la derecha
 
-		cmp rdx, r9						;si no ha llegado al final continua con el siguiente char/byte
+		cmp rdx, r9										;si no ha llegado al final continua con el siguiente char/byte
 			jnz .PrevChar
 		inc r14
 
@@ -523,9 +522,25 @@ LimpiarVarToPrint:
  ret
 
 ;------------------------------------------------------------------------------------------------------------------------------------------------
-;Llama a buscarOperacion para obtener la direccion de inicio del primer operando y luego a obtenerOperandos para poder pasar los operandos
-;a los registros rax y rbx.
+;	Llama a buscarOperacion para obtener la direccion de inicio del primer operando y luego a 
+;	obtenerOperandos para poder pasar los operandos a los registros rax y rbx.
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
+CicloPrincipal:
+	push rcx
+
+	xor rcx, rcx
+	.nextSymbol:
+		mov r9b, byte [varOperadores + rcx]
+		push rcx
+		call Operar
+		pop rcx
+		inc rcx													;incrementa el indice dentro de la variable de simbolos para leer el siguiente
+		cmp byte[varOperadores + rcx], 0h	;si no ha llegado al final continua con el siguiente simbolo
+			jnz .nextSymbol
+
+	pop rcx
+ret
+
 Operar:
 	call LimpiarVarToPrint
 	call buscarOperacion
@@ -533,27 +548,34 @@ Operar:
 		jz .exit
 	call realizarOperacion
 	call ajustarVariableToPrint
-	call printVarToOperate
 	call printVarToPrint
+	call LimpiarVarToOperate
+	call moverVarToPrintToVarToOperate
+	call quitarParentesisSobrantes
+jmp Operar
+
 	.exit
+	call quitarParentesisSobrantes
+	
 ret
 
 realizarOperacion:
-	mov r9, '+'
-	cmp r9, '+'
+	cmp r9b, '+'
 		jz sumar
 		
-	cmp r9, '-'
+	cmp r9b, '-'
 		jz restar
 		
-	cmp r9, '*'
+	cmp r9b, '*'
 		jz multiplicar
 		
-	cmp r9, '/'
+	cmp r9b, '/'
 		jz dividir
-	;cmp r9, '^'
-		;jz pow
-	cmp r9, '%'
+
+	cmp r9, '^'
+		jz pow
+
+	cmp r9b, '%'
 		jz mod
 ret
 
@@ -581,17 +603,17 @@ ret
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 buscarOperacion:
 	xor r14, r14
-	nextOperando:
+	xor rax, rax
+	.nextOperando:
 		mov al, byte[varToOperate +r14]
 		call addCharVarToPrint
-		call isOperador
-		cmp r10, 1										;Si el char actual es un operador entonces llama al procedimiento ObtenerOperandos para buscar el inicio del primer operando
+		cmp al, r9b										;Si el char actual es un operador entonces llama al procedimiento ObtenerOperandos para buscar el inicio del primer operando
 			jz ObtenerOperandos
-
+		.continuar:
 		inc r14
 		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
-			jnz nextOperando
-
+			jnz .nextOperando
+	.exit:
 	pop r14
 	mov r10, -1 ;TO DO SI LLEGO ACA YA NO HAY OPERACIONES PENDIENTES
 ret
@@ -601,10 +623,18 @@ ret
 ; de varToOperate
 ;------------------------------------------------------------------------------------------------------------------------------------------
 ObtenerOperandos:
+	mov al, byte[varToOperate +r14+1]
+	call isDigit
+	cmp r10, 0
+		jz buscarOperacion.continuar
+
+	mov al, byte[varToOperate +r14-1]
+	call isDigit
+	cmp r10, 0
+		jz buscarOperacion.continuar
 
 ;OBTENER EL INDICE DEL PRIMER OPERANDO
 	IraInicio:
-
 		dec r14
 			jz .guardarDireccion ;Al decrementar , si r14 es 0 quiere decir que es el inicio de varToOperate y por lo tanto no va a encontrar un operador antes
 		mov al, byte[varToOperate +r14-1]
@@ -619,12 +649,15 @@ ObtenerOperandos:
 ;/OBTENER EL INDICE DEL PRIMER OPERANDO
 
 	obtenerOperandos:
-		xor rbx, rbx
+	push rcx
 
 		call atoi											;Obtiene primer operando y se guarda en rax
-		mov rbx, rax									;se guarda el primer operando en RDX
+		mov rdx, rax									;se guarda el primer operando en RDX
 		inc r14												;se incrementa para pasar a el siguiente operando
 		call atoi											;Obtiene segudo operando y se guarda en rbx
+		mov rbx, rax
+		mov rax, rdx
+	pop rcx
 ret
 
 ;------------------------------------------------------------------------------------------------------------
@@ -758,18 +791,18 @@ mod:
 ret
 
 pow
-
 	cmp rbx, 0
 		jz casoPow0
 	cmp rbx, 1
 		jz casoPow1
 	
+	dec rbx
 	mov rcx, rbx
 	push rdx
-	xor rdx,rdx
 	powloop:
+		xor rdx,rdx
 		imul rbx
-		dec rbx
+		dec rcx
 		jnz powloop
 	cmp rdx, 0
 		;jnz	;TO DO error overflow
