@@ -1,10 +1,14 @@
 ;------------------------------------------------------------------------------------------------------------
-;					2 TAREA PROGRAMADA ENSAMBLADOR
-;				EVALUADOR DE EXPRESIONES MATEMATICAS
-;					ISAAC CAMPOS MESEN 2014004626
+;					INSTITUTO TECNOLÓGICO DE COSTA RICA
+;						TAREA PROGRAMADA 2
+;                                                I SEMESTRE 2015
+;						
+;					EVALUADOR DE EXPRESIONES MATEMATICAS
+;					   ISAAC CAMPOS MESEN 2014004626
+;					   MELISSA MOLINA CORRALES 2013006074
 ;					
 ;					
-;										ITCR 2015
+;										
 ;------------------------------------------------------------------------------------------------------------;
 
 	section .bss							;Section containing uninitialized data
@@ -127,7 +131,9 @@ ponerAsteriscos:
 			jnz .nextChar
 	pop rcx
 ret
-
+;----------------------------------------------------------------------------------------------------------------------
+; Validaciones
+;----------------------------------------------------------------------------------------------------------------------
 ;------------------------------------------------------------------------------------------------------------
 ;											validarPonerAsteriscos
 ;
@@ -217,6 +223,82 @@ validarCierreParentesis
 		call removeChar								;lo borramos
 		call printVarToOperate
 jmp quitarParentesisSobrantes.continuar
+
+;----------------------------------------------------------------------------------------------------------------------
+; Valida si la cantidad de variables en el buffer de entrada es mayor a 20
+;----------------------------------------------------------------------------------------------------------------------
+contarCantidadVariables:
+    push r13
+    xor r13,r13
+   nextVariable:
+	mov al, byte [rsi + rcx]
+	call isVariable	
+	inc rcx
+	cmp r10, 1
+	  jz nextVariable
+	inc r13
+	cmp byte [rsi + rcx],0h
+	  jnz nextVariable
+    pop r13
+ret
+
+varErrorCantidadVariables: db 'Error hay más de 20 variables',10
+CantidadVariablesLEN	equ $ - varErrorCantidadVariables
+
+validarCantidadVariables:
+    call contarCantidadVariables
+    mov rsi,varErrorCantidadVariables
+    mov rdx,CantidadVariablesLEN
+    cmp r13,20
+      ja printError
+ret
+
+;----------------------------------------------------------------------------------------------------------------------
+; Valida si todas las variables a sustituir existen
+;----------------------------------------------------------------------------------------------------------------------
+validarVariablesExistentes:
+	.nextChar:
+		mov al, byte [rsi + rcx]
+		call isVariable								;put in r10 1 if al is a symbol, else put 0
+		cmp r10, 1
+			jz validarVariables					;if actual char is a variable, add the char into the varTvariables
+
+		.continuar
+		inc rcx
+		cmp byte[rsi + rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar
+ret
+			  
+
+varErrorVariableNoExistente: db 'Error la variable a sustituir no existe en la expresión',10
+VariableNoExistenteLEN	equ $ - varErrorVariableNoExistente
+
+validarVariables:
+	call buscarVariable										
+	cmp rdx, -1						;si llego al final y no la encontro deja un -1 en rdx y sino un cero
+		jz validarVariables.continuar			;se sale del ciclo y regresa a validar las siguientes variables
+	mov rsi,varErrorVariableNoExistente
+	mov rdx,VariableNoExistenteLEN
+	jmp printError	
+	
+jmp validarVariables
+
+buscarVariable:
+	push rbx
+	xor rdx, rdx
+	.nextChar:
+		mov bl, byte [varToOperate + rdx]
+		cmp al, bl
+			jz .exit
+		inc rdx
+		cmp byte[rsi + rdx], 0h					;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar					;si llega al final y no encontro la variable devuelve un -1
+		mov rdx, -1
+
+	.exit:
+	  mov rdx,0 ; pone un cero en rdx si encontró la variable
+      pop rbx
+ret
 
 ;											/procesarEntrada
 ;------------------------------------------------------------------------------------------------------------
@@ -877,12 +959,18 @@ multiplicar:
 	js ponerSigno
 ret
 
+varErrorCalculo: db 'Error de calculo',10
+ErrorCalculoLEN	equ $ - varErrorCalculo
+
 dividir:
 	push rdx
 
 	xor rdx, rdx
 	div rbx ;RDX:RAX / RBX
-	;TO DO si rbx es 0 lanzar error de calculo
+	cmp rbx,0
+	  mov rsi,varErrorCalculo
+	  mov rdx, ErrorCalculoLEN
+	  jz printError
 	pop rdx
 	js ponerSigno
 ret
@@ -892,13 +980,18 @@ mod:
 
 	xor rdx, rdx
 	div rbx ;RDX:RAX / RBX
-	;TO DO si rbx es 0 lanzar error de calculo
+	cmp rbx,0
+	  mov rsi,varErrorCalculo
+	  mov rdx, ErroCalculoLEN
+	  jz printError 
 	mov rax, rdx
 	pop rdx
 	js ponerSigno
 
 ret
 
+varErrorOverflow: db 'Error de overflow',10
+ErrorOverflowLEN equ $ - varErrorOverflow
 pow
 	cmp rbx, 0
 		jz casoPow0
@@ -914,7 +1007,9 @@ pow
 		dec rcx
 		jnz powloop
 	cmp rdx, 0
-		;jnz	;TO DO error overflow
+	  mov rsi,varErrorOverflow
+	  mov rdx, ErrorOverflowLEN
+	  jnz printError 
 	pop rdx
 	js ponerSigno
 
@@ -996,6 +1091,26 @@ printVarToOperate:
 
 	dec r14
 	mov byte[varToOperate+r14], 0h	;volvemos a insertar el caracter null al final
+
+	pop rcx
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
+
+printError:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+	push rcx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi,rsi					;address of the buffer to print out
+	mov rdx,rdx								;number of chars to print out
+	syscall										;system call
 
 	pop rcx
 	pop rdx
