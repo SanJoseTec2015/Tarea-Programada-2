@@ -566,6 +566,7 @@ ret
 
 OperarParentesis:
 	call LimpiarVarToPrint
+	call quitarParentesisSobrantes
 	call buscarOperacionParentesis
 	cmp r10, -1
 		jz OperarParentesis.exit
@@ -574,7 +575,6 @@ OperarParentesis:
 	call printVarToPrint
 	call LimpiarVarToOperate
 	call moverVarToPrintToVarToOperate
-	call quitarParentesisSobrantes
 jmp OperarParentesis
 	.exit
 ret
@@ -586,6 +586,7 @@ ret
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 
 Operar:
+	call quitarParentesisSobrantes
 	call LimpiarVarToPrint
 	call buscarOperacion
 	cmp r10, -1
@@ -709,30 +710,36 @@ ObtenerOperandos:
 ret
 
 ;----------------------------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
 ;Este procedimiento va a iterar varToOperate hasta encontrar el primer ')'
 ;----------------------------------------------------------------------------------------------------------------------------------
 buscarOperacionParentesis:
 	xor r14,r14
+	xor r10, r10
 	.nextParentesis:
 		mov al, byte[varToOperate +r14]
 		call addCharVarToPrint
 		cmp al, ')'
 			jz .buscarOperador
+		.continuar
 		inc r14
 		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
 			jnz .nextParentesis
-			
 		jmp .exit
 	
 	.buscarOperador:
+		mov r8, r14
 		.IraOperador:
 			mov al, byte[varToOperate +r14]
 			cmp al, r9b
 				jz ObtenerOperandos
 			dec r14
+			cmp byte[varToOperate +r14], '('
+				jz .continuarBuscando
 			jnz .IraOperador
-		;TO DO MENSAJE DE ERROR DE PARENTESIS
+			;TO DO MENSAJE DE ERROR DE PARENTESIS
+		.continuarBuscando:
+			mov r14, r8
+			jmp .continuar
 	.exit
 	mov r10, -1
 ret
@@ -811,7 +818,7 @@ ret
 
 		itoa_1:
 			cmp rax, 0						;si ya se procesaron todos los digitos del numero o el numero de RAX es un O, salta a itoa_2
-				je itoa_2						;
+				je itoa_2
 			xor rdx, rdx						;se limpia la parte alta del divisor
 			mov rbx, 10
 			div rbx							;RDX:RAX / RBX
@@ -906,14 +913,14 @@ pow
 		jz casoPow1
 	
 	dec rbx
-	mov rcx, rbx
+	mov rcx, rax
 	push rdx
 	powloop:
 		xor rdx,rdx
-		imul rbx
-		dec rcx
+		imul rax, rcx
+		dec rbx
 		jnz powloop
-	cmp rdx, 0
+	cmp rbx, 0
 		;jnz	;TO DO error overflow
 	pop rdx
 	js ponerSigno
