@@ -60,7 +60,7 @@ varErrorCantidadVariables: db 'Error hay mas de 20 variables',10
 CantidadVariablesLEN equ $ - varErrorCantidadVariables
 
 varErrorParentesis: db 'Error los parentesis no estan equilibrados',10
-ParentesisLEN equ $ - varErrorParentesis
+ParentesisLen equ $ - varErrorParentesis
 ;************************************/MENSAJES DE ERROR********************************************************
 
 
@@ -793,8 +793,9 @@ buscarOperacionParentesis:
 			dec r14
 			cmp byte[varToOperate +r14], '('
 				jz .continuarBuscando
-			jnz .IraOperador
-			;TO DO MENSAJE DE ERROR DE PARENTESIS
+			cmp r14, 0
+				jnz .IraOperador
+		jmp printErrorParentesis
 		.continuarBuscando:
 			mov r14, r8
 			jmp .continuar
@@ -1020,6 +1021,11 @@ jmp printError
 printErrorOverflow:
 	mov rsi, varErrorOverflow
 	mov rdx, ErrorOverflowLEN
+jmp printError 
+
+printErrorParentesis:
+	mov rsi, varErrorParentesis
+	mov rdx, ParentesisLen
 jmp printError 
 
 printError:
