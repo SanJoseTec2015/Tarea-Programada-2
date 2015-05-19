@@ -136,8 +136,11 @@ procesarEntrada:
 	.nextChar:
 		;Get a char from the buffer and put it in RAX
 		mov al, byte [rsi + rcx]				;put a char/byte from the input buffer into the al. rsi = direccion buffer rcx = indice
+		cmp al, ' '
+			jz .continuar
 		mov byte[varToOperate+r14], al
 		inc r14										;indice varToOperate
+		.continuar
 		inc rcx											;indice buffer
 		cmp byte[rsi + rcx], ','				;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar
