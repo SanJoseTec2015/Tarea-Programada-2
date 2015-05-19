@@ -1,10 +1,13 @@
 ;------------------------------------------------------------------------------------------------------------
-;					2 TAREA PROGRAMADA ENSAMBLADOR
-;				EVALUADOR DE EXPRESIONES MATEMATICAS
-;					ISAAC CAMPOS MESEN 2014004626
+;					INSTITUTO TECNOLÓGICO DE COSTA RICA
+;								TAREA PROGRAMADA 2
+;									I SEMESTRE 2015
+;						
+;					EVALUADOR DE EXPRESIONES MATEMATICAS
+;						ISAAC CAMPOS MESEN 2014004626
+;					MELISSA MOLINA CORRALES 2013006074
 ;					
-;					
-;										ITCR 2015
+;										ANIO 2015
 ;------------------------------------------------------------------------------------------------------------;
 
 	section .bss							;Section containing uninitialized data
@@ -16,10 +19,18 @@ Buffer resb BUFLEN					;Text buffer itself
 
 ;varIntToStringLEN	equ $ - varIntToString
 
-entrada: db "Entrada = "
+entrada: db '------------------------------------------------------------', 10,10,\
+'        INSTITUTO TECNOLOGICO DE COSTA RICA', 10,\
+'                TAREA PROGRAMADA 2', 10,\
+'                 I SEMESTRE 2015', 10,10,\
+'       EVALUADOR DE EXPRESIONES MATEMATICAS', 10, 10,\
+'          ISAAC CAMPOS MESEN 2014004626', 10,\
+'        MELISSA MOLINA CORRALES 2013006074', 10, 10,\
+'                    ANIO 2015', 10,10,\
+'------------------------------------------------------------',10, 10, ' ENTRADA = '
 entradaLEN	equ $ - entrada
 
-salida: db "Salida = "
+salida: db " RESULTADO = "
 salidaLEN equ $ - salida
 
 varToOperate: db 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 0h, 10
@@ -30,10 +41,28 @@ varOperadores : db '^', '%', '/', '*', '+', '-', 0h
 
 varSymbol : db '$', 10
 
-varInt : db '#', 10
-;varIntToStringLEN	equ $ - varIntToString
 varDebug: db 'ok', 10
+varTab: db '    '
 varDebug2: db 'ok2', 10
+
+
+;*************************************MENSAJES DE ERROR*****************************************************
+varErrorCalculo: db 'Error de calculo',10
+ErrorCalculoLEN equ $ - varErrorCalculo
+
+varErrorOverflow: db 'Error de overflow',10
+ErrorOverflowLEN equ $ - varErrorOverflow
+
+varErrorVariableNoExistente: db 'Error variable no definida',10
+VariableNoExistenteLEN equ $ - varErrorVariableNoExistente
+
+varErrorCantidadVariables: db 'Error hay mas de 20 variables',10
+CantidadVariablesLEN equ $ - varErrorCantidadVariables
+
+varErrorParentesis: db 'Error los parentesis no estan equilibrados',10
+ParentesisLEN equ $ - varErrorParentesis
+;************************************/MENSAJES DE ERROR********************************************************
+
 
 	section .text						;Section containing code
 
@@ -52,8 +81,10 @@ _start:
 	call printVarToOperate
 
 	call cambiarVariables
-
+	
 	call printVarToOperate
+	
+	call validarVariablesInVarToOperate
 
 	call quitarParentesisSobrantes
 	
@@ -62,6 +93,10 @@ _start:
 	
 	mov rsi, Operar
 	call CicloPrincipal
+	
+	call salidanum
+	
+	call printVarToPrint
 
 	jmp done
 
@@ -122,6 +157,23 @@ ponerAsteriscos:
 			jz validarPonerAsteriscos
 
 		.continuar:											;punto de retorno del salto anterior anterior
+		inc rcx													;indice
+		cmp byte [varToOperate + rcx], 0h		;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar
+	pop rcx
+ret
+;----------------------------------------------------------------------------------------------------------------------
+; Validaciones
+;----------------------------------------------------------------------------------------------------------------------
+validarVariablesInVarToOperate:
+	push rcx
+	xor rcx, rcx
+	.nextChar:
+		mov al, byte [varToOperate + rcx]		;put a char/byte from the buffer into the al, rcx = indice
+		call isVariable
+		cmp r10, 1											;si no es un operador, salta a validar si debe poner asterisco
+			jz printErrorDeVarNoDefinida
+
 		inc rcx													;indice
 		cmp byte [varToOperate + rcx], 0h		;si no ha llegado al final continua con el siguiente char/byte
 			jnz .nextChar
@@ -218,8 +270,119 @@ validarCierreParentesis
 		call printVarToOperate
 jmp quitarParentesisSobrantes.continuar
 
-;											/procesarEntrada
 ;------------------------------------------------------------------------------------------------------------
+;											cambiarVariables
+;
+;	E: RCX la posicion de inicio de las variables del buffer de entrada
+;------------------------------------------------------------------------------------------------------------
+cambiarVariables:
+	xor r9, r9
+	.nextChar:
+		mov al, byte [rsi + rcx]
+		call isVariable								;put in r10 1 if al is a symbol, else put 0
+		cmp r10, 1
+			jz cambiarVariable					;if actual char is a variable, add the char into the varTvariables
+
+		.continuar
+		inc rcx
+		cmp byte[rsi + rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar
+ret
+
+;------------------------------------------------------------------------------------------------------------
+;											cambiarVariable
+;
+;	Itera la variable to operate y sustitute los las variables con el valor correspondiente
+;	E: RCX la posicion de variable para sustituir en el buffer
+;------------------------------------------------------------------------------------------------------------
+cambiarVariable:
+	inc r9
+	cmp r9, 20
+	ja printErrorCantidadVariables
+	
+	.loop
+		call getPosVar										;devuelve la posicion en RDX
+		cmp rdx, -1										;si llego al final y no la encontro retorna un -1 en rdx
+			jz cambiarVariables.continuar			;se sale del ciclo y regresa a validar las siguientes variables, hasta que haya modificado todas las de la expresion
+
+		call getPosValue									;devuelve la posicion en R8
+		call movValue										;mueve a RDX los valores numericos iniciando en la posicion R8 del buffer
+	jmp .loop
+
+;------------------------------------------------------------------------------------------------------------
+;											getPosVar
+;	E: AL el byte con la variable a buscar
+;	S: RDX indice dentro de varToPos con la varible
+;		Si la variable no exite RDX = -1
+;------------------------------------------------------------------------------------------------------------
+getPosVar:
+	push rbx
+
+	xor rdx, rdx
+	.nextChar:
+		mov bl, byte [varToOperate + rdx]
+		cmp al, bl
+			jz .exit
+		inc rdx
+		cmp byte[rsi + rdx], 0h					;si no ha llegado al final continua con el siguiente char/byte
+			jnz .nextChar								;si llega al final y no encontro la variable devuelve un -1
+		mov rdx, -1
+
+	.exit
+	pop rbx
+ret
+
+;------------------------------------------------------------------------------------------------------------
+;											getPosValue
+;	R8 almacena el indice de inicio del valor de la variable en el buffer
+;	M: R8
+;------------------------------------------------------------------------------------------------------------
+getPosValue:
+	push rax
+	inc rcx
+	mov r8, rcx				;movem al indice de la operacion actual el indice de donde comienza la variable
+	.nextChar:
+		inc r8
+		;Get a char from the buffer and put it in RAX
+		mov al, byte [rsi + r8]	;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
+		call isDigit
+		cmp r10, 1
+			jz .exit
+		call isVariable
+		cmp r10, 1
+			jnz .nextChar
+		jmp printErrorDeVarNoDefinida
+	.exit:
+	pop rax
+ret
+
+;------------------------------------------------------------------------------------------------------------
+;											movValue
+;	Siempre que los bytes siguientes sean numeros los va insertando
+;	E: R8 el indiice dentro del buffer con el inicio del valor de la variable
+;		RDX la posicion de la variable donde se va a insertar el valor
+;------------------------------------------------------------------------------------------------------------
+movValue:
+	push rax
+
+	mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
+	mov  byte [varToOperate + rdx], al
+
+	.nextDigit:
+		inc r8
+		mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
+		call isDigit
+		cmp r10, 1
+			jnz .exit
+		call liberarByteVarToOperate
+		inc rdx
+
+		mov  byte [varToOperate + rdx], al
+	jmp .nextDigit
+	.exit:
+	pop rax
+ret
+
 
 ;------------------------------------------------------------------------------------------------------------
 ;											validarPonerAsteriscos
@@ -253,7 +416,7 @@ moverVarToPrintToVarToOperate:
 		mov byte[varToOperate + r14], al
 		inc r14
 		inc r15
-		cmp byte [varToPrint + r15], 0h
+		cmp byte[varToPrint + r15], 0h
 			jnz .next_byte
 ret
 
@@ -261,130 +424,24 @@ ret
 ; Este procedimiento recorre varToOperate y revisa si solo quedan digitos, si es asi quiere decir que ya no hay operaciones por resolver.
 ; Deja en r10 un  1 si en varToOperate solo hay digitos.
 ;-----------------------------------------------------------------------------------------------------------------------------------------
- revisarDigitosInVarToOperate:
+revisarDigitosInVarToOperate:
 	push r14
 	xor r14,r14
 	xor r10, r10	;pone un 0
 	nextByte:
-		mov al,byte [varToOperate + r14]
+		mov al,byte[varToOperate + r14]
 		call isDigit
 		cmp r10,0
 			jz salir ; si no es digito no  modifica el r10 y se sale
 
 		inc r14
-		cmp byte [varToOperate + r14],0h ; si no ha llegado al final de varToOperate, entonces continua revisando si hay digitos
+		cmp byte[varToOperate + r14],0h ; si no ha llegado al final de varToOperate, entonces continua revisando si hay digitos
 			jnz nextByte
 		; si ya llego al final, quiere decir que solo habia digitos y deja en r10 un 1
 	modificar_r10:
 		mov r10,1
 		salir:
 	pop r14
-ret
-
-;------------------------------------------------------------------------------------------------------------
-;											cambiarVariables
-;
-;	E: RCX la posicion de inicio de las variables del buffer de entrada
-;------------------------------------------------------------------------------------------------------------
-cambiarVariables:
-	.nextChar:
-		mov al, byte [rsi + rcx]
-		call isVariable								;put in r10 1 if al is a symbol, else put 0
-		cmp r10, 1
-			jz cambiarVariable					;if actual char is a variable, add the char into the varTvariables
-
-		.continuar
-		inc rcx
-		cmp byte[rsi + rcx], 0h				;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar
-ret
-
-;------------------------------------------------------------------------------------------------------------
-;											cambiarVariable
-;
-;	Itera la variable to operate y sustitute los las variables con el valor correspondiente
-;	E: RCX la posicion de variable para sustituir en el buffer
-;------------------------------------------------------------------------------------------------------------
-cambiarVariable:
-	call getPosVar										;devuelve la posicion en RDX
-	cmp rdx, -1										;si llego al final y no la encontro retorna un -1 en rdx
-		jz cambiarVariables.continuar			;se sale del ciclo y regresa a validar las siguientes variables, hasta que haya modificado todas las de la expresion
-
-	call getPosValue									;devuelve la posicion en R8
-	call movValue										;mueve a RDX los valores numericos iniciando en la posicion R8 del buffer
-jmp cambiarVariable
-
-;------------------------------------------------------------------------------------------------------------
-;											getPosVar
-;	E: AL el byte con la variable a buscar
-;	S: RDX indice dentro de varToPos con la varible
-;		Si la variable no exite RDX = -1
-;------------------------------------------------------------------------------------------------------------
-getPosVar:
-	push rbx
-
-	xor rdx, rdx
-	.nextChar:
-		mov bl, byte [varToOperate + rdx]
-		cmp al, bl
-			jz .exit
-		inc rdx
-		cmp byte[rsi + rdx], 0h					;si no ha llegado al final continua con el siguiente char/byte
-			jnz .nextChar								;si llega al final y no encontro la variable devuelve un -1
-		mov rdx, -1
-
-	.exit
-	pop rbx
-ret
-
-;------------------------------------------------------------------------------------------------------------
-;											getPosValue
-;	R8 almacena el indice de inicio del valor de la variable en el buffer
-;	M: R8
-;------------------------------------------------------------------------------------------------------------
-getPosValue:
-	push rax
-	mov r8, rcx				;movem al indice de la operacion actual el indice de donde comienza la variable
-	.nextChar:
-		;Get a char from the buffer and put it in RAX
-		mov al, byte [rsi + r8]	;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
-		call isDigit
-		cmp r10, 1
-			jz .exit			;if actual char is an number, add the char into the varTvariables
-		inc r8
-		mov al, byte[rsi + r8]
-		call isVariable
-			jnz .nextChar
-		; TODO ELSE: ENVIAR ERROR DE VARIABLE NO DEFINIDA
-	.exit:
-	pop rax
-ret
-
-;------------------------------------------------------------------------------------------------------------
-;											movValue
-;	Siempre que los bytes siguientes sean numeros los va insertando
-;	E: R8 el indiice dentro del buffer con el inicio del valor de la variable
-;		RDX la posicion de la variable donde se va a insertar el valor
-;------------------------------------------------------------------------------------------------------------
-movValue:
-	push rax
-
-	mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
-	mov  byte [varToOperate + rdx], al
-
-	.nextDigit:
-		inc r8
-		mov al, byte [rsi + r8]				;put a char/byte from the input buffer into the al. rsi = direccion buffer r8 = indice
-		call isDigit
-		cmp r10, 1
-			jnz .exit
-		call liberarByteVarToOperate
-		inc rdx
-
-		mov  byte [varToOperate + rdx], al
-	jmp .nextDigit
-	.exit:
-	pop rax
 ret
 
 liberarByteVarToOperate:
@@ -396,8 +453,8 @@ liberarByteVarToOperate:
 	.PrevChar:
 		dec r9
 
-		mov bl, byte [varToOperate + r9]		;se mueve el ultimo caracter de la variable
-		mov byte [varToOperate + r9+1], bl	;se mueve el ultimo caracter una posicion a la derecha
+		mov bl, byte[varToOperate + r9]		;se mueve el ultimo caracter de la variable
+		mov byte[varToOperate + r9+1], bl	;se mueve el ultimo caracter una posicion a la derecha
 
 		cmp rdx, r9										;si no ha llegado al final continua con el siguiente char/byte
 			jnz .PrevChar
@@ -475,7 +532,7 @@ isOperador:
 
 	xor rcx, rcx
 	nextSymbol:
-		cmp al, byte [varOperadores + rcx]	;if al is a symbol
+		cmp al, byte[varOperadores + rcx]	;if al is a symbol
 			jz .isSymbol
 
 		inc rcx												;incrementa el indice dentro de la variable de simbolos para leer el siguiente
@@ -502,25 +559,26 @@ ret
 ;------------------------------------------------------------------------------------------------------------
 isVariable:
 	xor r10, r10
+	
+	cmp al, '^'
+		jz .exit
+	
+	cmp al, 'A'				; test the actual read char against 'A'
+		jb .exit			; if < 'A'
 
-	validarMenorAA:
-		cmp al, 'A'				; test the actual read char against 'A'
-			jb exit			; if < 0
+	cmp al, 'z'				; test the read char against 'z'
+		ja .exit			; if > z
 
-	validarMayorAz:
-		cmp al, 'z'				; test the read char against 'z'
-			ja exit			; if > z
-
-	validarMenorAZ
-		cmp al, 'Z'				; test the actual read char against 'Z'
-			jbe isVar			; if <= Z
-	validarMayorAA:
-		cmp al, 'A'				; test the read char against 'A'
-			jae isVar			; if >= A
+	cmp al, 'Z'				; test the actual read char against 'Z'
+		jbe .isVar			; if <= Z
+		
+	cmp al, 'A'				; test the read char against 'A'
+		jae .isVar			; if >= A
+		
 	.exit:
 	ret
 
-	isVar:
+	.isVar:
 	inc r10
 ret
 
@@ -531,7 +589,7 @@ ret
 LimpiarVarToOperate:
 	xor r14, r14
 	limpiarOperate:
-		mov byte [varToOperate + r14], 0h
+		mov byte[varToOperate + r14], 0h
 		inc r14
 		cmp byte[varToOperate + r14], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz limpiarOperate
@@ -541,7 +599,7 @@ ret
 LimpiarVarToPrint:
 	xor r15, r15
 	limpiarPrint:
-		mov byte [varToPrint + r15], 0h
+		mov byte[varToPrint + r15], 0h
 		inc r15
 		cmp byte[varToPrint + r15], 0h				;si no ha llegado al final continua con el siguiente char/byte
 			jnz limpiarPrint
@@ -550,10 +608,9 @@ LimpiarVarToPrint:
 
 CicloPrincipal:
 	push rcx
-
 	xor rcx, rcx
 	.nextSymbol:
-		mov r9b, byte [varOperadores + rcx]
+		mov r9b, byte[varOperadores + rcx]
 		push rcx
 		call rsi
 		pop rcx
@@ -577,6 +634,7 @@ OperarParentesis:
 	call moverVarToPrintToVarToOperate
 jmp OperarParentesis
 	.exit
+	call quitarParentesisSobrantes
 ret
 
 
@@ -586,7 +644,6 @@ ret
 ;-------------------------------------------------------------------------------------------------------------------------------------------------
 
 Operar:
-	call quitarParentesisSobrantes
 	call LimpiarVarToPrint
 	call buscarOperacion
 	cmp r10, -1
@@ -598,6 +655,7 @@ Operar:
 	call moverVarToPrintToVarToOperate
 jmp Operar
 	.exit
+	call quitarParentesisSobrantes
 ret
 
 realizarOperacion:
@@ -764,7 +822,7 @@ atoi:
 	next_digit:
 
 		;Get a char from the buffer and put it in RAX
-		mov al, byte [varToOperate + r14]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
+		mov al, byte[varToOperate + r14]	;put a char/byte from the input buffer into the al rsi = direccion buffer rcx = indice desde el byte actual del buffer
 		sub al, '0'						;convert from ASCII to number
 		imul rbx, 10
 		add rbx, rax					;rbx = rbx*10 + eax
@@ -782,7 +840,7 @@ atoi:
 		
 	.validarNegarNumero:
 
-		cmp byte [varToOperate + r11-1], '-'		;si el numero transformado tenia un signo de resta, se niega
+		cmp byte[varToOperate + r11-1], '-'		;si el numero transformado tenia un signo de resta, se niega
 			jnz .exit
 		neg rbx
 		mov r10, 1
@@ -830,7 +888,7 @@ ret
 			cmp cx, 0							;Esta seccion maneja el caso cuando
 				ja itoa_3	;if CX > 0				;el numero a convertir (AX) es 0.
 			mov ax, '0'					;En este caso, el ciclo anterior
-			mov byte [varToPrint+r15], al	;no guarda valores en el stack y
+			mov byte[varToPrint+r15], al	;no guarda valores en el stack y
 			;put the char into varIntToString result
 			inc rsi
 			inc rcx
@@ -870,7 +928,7 @@ ret
 
 ponerSigno:
 	neg rax
-	mov byte [varToPrint+r15], '-'
+	mov byte[varToPrint+r15], '-'
 	inc r15
 ret
 
@@ -886,20 +944,26 @@ ret
 
 dividir:
 	push rdx
+	
+	cmp rbx,0
+		jz printErrorDeCalculo
 
 	xor rdx, rdx
 	div rbx ;RDX:RAX / RBX
-	;TO DO si rbx es 0 lanzar error de calculo
+
 	pop rdx
 	js ponerSigno
 ret
 
 mod:
 	push rdx
+	
+	cmp rbx, 0
+		jz printErrorDeCalculo 
 
 	xor rdx, rdx
 	div rbx ;RDX:RAX / RBX
-	;TO DO si rbx es 0 lanzar error de calculo
+	cmp rbx,0
 	mov rax, rdx
 	pop rdx
 	js ponerSigno
@@ -919,9 +983,8 @@ pow
 		xor rdx,rdx
 		imul rax, rcx
 		dec rbx
-		jnz powloop
-	cmp rbx, 0
-		;jnz	;TO DO error overflow
+	jnz powloop
+
 	pop rdx
 	js ponerSigno
 
@@ -935,6 +998,35 @@ casoPow1:
 ret
 ;						/OPERACIONES ARITMETICAS
 ;******************************************************************************
+
+printErrorDeCalculo:
+	mov rsi, varErrorCalculo
+	mov rdx, ErrorCalculoLEN
+jmp printError 
+
+
+printErrorDeVarNoDefinida:
+	mov rsi, varErrorVariableNoExistente
+	mov rdx, VariableNoExistenteLEN
+jmp printError 
+
+
+printErrorCantidadVariables:
+	mov rsi, varErrorCantidadVariables
+	mov rdx, CantidadVariablesLEN
+jmp printError 
+
+
+printErrorOverflow:
+	mov rsi, varErrorOverflow
+	mov rdx, ErrorOverflowLEN
+jmp printError 
+
+printError:
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	syscall										;system call
+jmp done
 
 done:
 	mov rax, 60							;sys_exit (code 60)
@@ -957,7 +1049,25 @@ intronum:
 	pop rsi
 	pop rdi
 	pop rax
-	ret
+ret
+
+salidanum:
+	push rax
+	push rdi
+	push rsi
+	push rdx
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, salida						;address of the buffer to print out
+	mov rdx, salidaLEN				;number of chars to print out
+	syscall										;system call
+
+	pop rdx
+	pop rsi
+	pop rdi
+	pop rax
+ret
 
 printVarToPrint:
 	push rax
@@ -968,6 +1078,12 @@ printVarToPrint:
 
 	mov byte[varToPrint+r15], 10	;agregamos un cambio de linea
 	inc r15
+
+	mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varTab					;address of the buffer to print out
+	mov rdx, 1							;number of chars to print out
+	syscall										;system call
 
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
@@ -994,6 +1110,12 @@ printVarToOperate:
 
 	mov byte[varToOperate+r14], 10	;agregamos un cambio de linea
 	inc r14
+
+		mov rax, 1								;sys_write (code 1)
+	mov rdi, 1								;file_descriptor (code 1 stdout)
+	mov rsi, varTab					;address of the buffer to print out
+	mov rdx, 1							;number of chars to print out
+	syscall										;system call
 
 	mov rax, 1								;sys_write (code 1)
 	mov rdi, 1								;file_descriptor (code 1 stdout)
