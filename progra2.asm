@@ -56,7 +56,11 @@ _start:
 	call printVarToOperate
 
 	call quitarParentesisSobrantes
-
+	
+	mov rsi, OperarParentesis
+	call CicloPrincipal
+	
+	mov rsi, Operar
 	call CicloPrincipal
 
 	jmp done
@@ -544,10 +548,6 @@ LimpiarVarToPrint:
 	xor r15, r15
  ret
 
-;------------------------------------------------------------------------------------------------------------------------------------------------
-;	Llama a buscarOperacion para obtener la direccion de inicio del primer operando y luego a 
-;	obtenerOperandos para poder pasar los operandos a los registros rax y rbx.
-;-------------------------------------------------------------------------------------------------------------------------------------------------
 CicloPrincipal:
 	push rcx
 
@@ -555,15 +555,35 @@ CicloPrincipal:
 	.nextSymbol:
 		mov r9b, byte [varOperadores + rcx]
 		push rcx
-		call Operar
+		call rsi
 		pop rcx
 		inc rcx													;incrementa el indice dentro de la variable de simbolos para leer el siguiente
 		cmp byte[varOperadores + rcx], 0h	;si no ha llegado al final continua con el siguiente simbolo
 			jnz .nextSymbol
-	
 	.exit:
 	pop rcx
 ret
+
+OperarParentesis:
+	call LimpiarVarToPrint
+	call buscarOperacionParentesis
+	cmp r10, -1
+		jz OperarParentesis.exit
+	call realizarOperacion
+	call ajustarVariableToPrint
+	call printVarToPrint
+	call LimpiarVarToOperate
+	call moverVarToPrintToVarToOperate
+	call quitarParentesisSobrantes
+jmp OperarParentesis
+	.exit
+ret
+
+
+;------------------------------------------------------------------------------------------------------------------------------------------------
+;	Llama a buscarOperacion para obtener la direccion de inicio del primer operando y luego a 
+;	obtenerOperandos para poder pasar los operandos a los registros rax y rbx.
+;-------------------------------------------------------------------------------------------------------------------------------------------------
 
 Operar:
 	call LimpiarVarToPrint
@@ -575,9 +595,7 @@ Operar:
 	call printVarToPrint
 	call LimpiarVarToOperate
 	call moverVarToPrintToVarToOperate
-	call quitarParentesisSobrantes
 jmp Operar
-
 	.exit
 ret
 
@@ -627,6 +645,8 @@ ret
 buscarOperacion:
 	xor r14, r14
 	xor rax, rax
+	cmp r11, 0
+		jz .exit
 	.nextOperando:
 		mov al, byte[varToOperate +r14]
 		call addCharVarToPrint
@@ -672,19 +692,54 @@ ObtenerOperandos:
 ;/OBTENER EL INDICE DEL PRIMER OPERANDO
 	obtenerOperandos:
 	push rcx
+		mov r12, 1										;bandera de primer operando
 		call atoi											;Obtiene primer operando y se guarda en rax
 		mov rdx, rax									;se guarda el primer operando en RDX
 		inc r14												;se incrementa para pasar a el siguiente operando
 		cmp byte[varToOperate+r14] , '-'
 			jnz segundoOperando
-		inc r14											;si el segundo operando es negativo, se salta el signo
-		mov r8, 1
+			inc r14											;si el segundo operando es negativo, se salta el signo
+			mov r8, 1
 		segundoOperando:
+		mov r12, 0										;bandera de primer operando
 		call atoi											;Obtiene segudo operando y se guarda en rbx
 		mov rbx, rax
 		mov rax, rdx
 	pop rcx
 ret
+
+;----------------------------------------------------------------------------------------------------------------------------------
+;Este procedimiento va a iterar varToOperate hasta encontrar el primer ')'
+;----------------------------------------------------------------------------------------------------------------------------------
+buscarOperacionParentesis:
+	xor r14,r14
+	.nextParentesis:
+		mov al, byte[varToOperate +r14]
+		call addCharVarToPrint
+		cmp al, ')'
+			jz .buscarOperador
+		inc r14
+		cmp byte[varToOperate + r14], 0h	;si no ha llegado al final continua
+			jnz .nextParentesis
+			
+		jmp .exit
+	
+	.buscarOperador:
+		.IraOperador:
+			mov al, byte[varToOperate +r14]
+			cmp al, r9b
+				jz ObtenerOperandos
+			dec r14
+			jnz .IraOperador
+		;TO DO MENSAJE DE ERROR DE PARENTESIS
+	.exit
+	mov r10, -1
+ret
+;--------------------------------------------------------------------------------------------------------------
+;Va decrementando el r14 despues del primer ')' hasta encontrar el operador que sea igual a r9b, el cual seria
+;la operación actual
+;--------------------------------------------------------------------------------------------------------------
+
 
 ;------------------------------------------------------------------------------------------------------------
 ;	E: RSI el la direccion de inicio del numero a transformar
@@ -714,7 +769,11 @@ atoi:
 	cmp r11, 0
 		jz .exit
 		
+	cmp r12, 1
+		jz .exit
+		
 	.validarNegarNumero:
+
 		cmp byte [varToOperate + r11-1], '-'		;si el numero transformado tenia un signo de resta, se niega
 			jnz .exit
 		neg rbx
